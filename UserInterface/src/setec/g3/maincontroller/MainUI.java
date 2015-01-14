@@ -54,11 +54,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.renderscript.RenderScript.Priority;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -690,6 +692,62 @@ public class MainUI extends Activity implements SensorEventListener{
 			deadManAlarms=null;
 		}
 	}
+	public void playPredefinedMessageReceived(){
+		sounds=MediaPlayer.create(this, R.raw.predefmessage);
+		sounds.start();
+		sounds.setOnCompletionListener(new OnCompletionListener(){
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				sounds.stop();
+				sounds.reset();
+				sounds.release();
+				sounds=null;
+			}
+			
+		});
+	}
+	public void playMessageReceived(){
+		sounds=MediaPlayer.create(this, R.raw.message);
+		sounds.start();
+		sounds.setOnCompletionListener(new OnCompletionListener(){
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				sounds.stop();
+				sounds.reset();
+				sounds.release();
+				sounds=null;
+			}
+			
+		});
+	}
+	public void playObjectiveReceived(){
+		sounds=MediaPlayer.create(this, R.raw.objective_received);
+		sounds.start();
+		sounds.setOnCompletionListener(new OnCompletionListener(){
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				sounds.stop();
+				sounds.reset();
+				sounds.release();
+				sounds=null;
+			}
+			
+		});
+	}
+	public void playBackendRequestReceived(){
+		sounds=MediaPlayer.create(this, R.raw.backend_request);
+		sounds.start();
+		sounds.setOnCompletionListener(new OnCompletionListener(){
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				sounds.stop();
+				sounds.reset();
+				sounds.release();
+				sounds=null;
+			}
+			
+		});
+	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/
 	
@@ -1024,6 +1082,12 @@ public class MainUI extends Activity implements SensorEventListener{
 			root.sendMessage(new StringBuilder("Distância à Linha de Fogo: ").append(d).append("m\nSituação: ").append(codeDescription).toString());
 		}
 	}
+	public void parseObjectiveRecived(float lat, float lon){
+		this.playObjectiveReceived();
+		this.Olat=(double)lat;
+		this.Olong=(double)lon;
+		this.root.postMessage("Command", "New objective received. Please go to target mode.", PriorityLevel.CRITICAL, false);
+	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/
 	
@@ -1295,6 +1359,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	 *************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 	public void parseIncommingPredefinedMessage(int predefinedMessageCode){
+		this.playPredefinedMessageReceived();
 		switch (predefinedMessageCode){
 			case CommEnumerators.GO_REST:
 				if(language==UILanguage.EN){
@@ -1408,6 +1473,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		}
 	}
 	public void parseMessageFromBackend(int infoCode){
+		this.playMessageReceived();
 		switch(infoCode){
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_PREDEFINED_MESSAGE:
 				break;

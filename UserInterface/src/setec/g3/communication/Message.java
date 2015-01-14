@@ -9,6 +9,7 @@ import java.util.Arrays;
 import setec.g3.maincontroller.Login;
 import setec.g3.maincontroller.MainUI;
 import setec.g3.maincontroller.MainUI;
+import setec.g3.userinterface.InterfaceStatusEnumerators.PriorityLevel;
 
 import android.content.Intent;
 import android.util.Log;
@@ -293,13 +294,13 @@ public class Message {
 			// predefined message
 			byte preByte = messageArray[3];
 			final int pre_message = (int) (preByte & 0xFF);
-		/*	userInterface.runOnUiThread(new Runnable() {
+			userInterface.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
 					userInterface.parseIncommingPredefinedMessage(pre_message);
 				}
-			});*/
+			});
 			break;
 		case 129:
 			// personalized message
@@ -310,22 +311,31 @@ public class Message {
 						"ISO-8859-1");
 				// send to UI
 				Log.d("Message", "received: " + personMessage);
-		/*  	userInterface.runOnUiThread(new Runnable() {
+				userInterface.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
 						userInterface.root.postMessage("Command",
 								personMessage, PriorityLevel.NORMAL, false);
+						userInterface.playMessageReceived();
 					}
 
-				});*/
+				});
 			} catch (UnsupportedEncodingException e) {
 				Log.e("ReadNet", e.toString());
 			}
 			break;
 		case 130:
-			// requests fireline update
-			// warn UI
+			userInterface.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					userInterface.root.postMessage("Command",
+							"Por favor atualizar situação da linha de fogo.", PriorityLevel.CRITICAL, false);
+					userInterface.playBackendRequestReceived();
+				}
+
+			});
 			break;
 		case 131:
 			// team information
@@ -402,16 +412,23 @@ public class Message {
 			byte[] latByte = new byte[4];
 			System.arraycopy(messageArray, 2, latByte, 0, 4);
 			int i1 = byteArrayToInt4(latByte);
-			Float lat = Float.intBitsToFloat(i1);
+			final Float lat = Float.intBitsToFloat(i1);
 			// longitude
 			byte[] longByte = new byte[4];
 			System.arraycopy(messageArray, 6, longByte, 0, 4);
 			int i2 = byteArrayToInt4(longByte);
-			Float longi = Float.intBitsToFloat(i2);
+			final Float longi = Float.intBitsToFloat(i2);
 			// send to UI
 			Log.d("Message", "int2: " + String.valueOf(i1));
 			Log.d("Message", "received: " + "lat=" + String.valueOf(lat)
 					+ " long=" + String.valueOf(longi));
+			userInterface.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					userInterface.parseObjectiveRecived(lat, longi);
+				}
+
+			});
 			break;
 		case 136:
 			//activate automatic alert
