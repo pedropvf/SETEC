@@ -29,7 +29,7 @@ public class CommEnumerators {
 	public static final int FIREFIGHTER_TO_COMMAND_MESSGAGE=11;
 	public static final int FIREFIGHTER_TO_COMMAND_SOS=12;
 	public static final int FIREFIGHTER_TO_COMMAND_SURROUNDED_BY_FLAMES=13;
-	public static final int FIREFIGHTER_TO_COMMAND_FIRELINE_GPS_UPDATE=14;
+	public static final int FIREFIGHTER_TO_COMMAND_FIRELINE_STATUS=14;
 	public static final int FIREFIGHTER_TO_COMMAND_TEAM_UPDATE=15;
 	public static final int FIREFIGHTER_TO_COMMAND_CO_ALERT=16;
 	public static final int FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT=17;

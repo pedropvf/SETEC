@@ -52,6 +52,12 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/selector_line_of_fire_active" />
+            <Button
+                android:id="@+id/btn_line_of_fire_situation_send"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_send_message" />
         </LinearLayout>
         
         <LinearLayout

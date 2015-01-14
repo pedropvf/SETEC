@@ -137,6 +137,7 @@ public class FlyOutContainer extends RelativeLayout {
     	
 	/* distance measurement */
     public ImageView lineOfFireSituationSelector;
+    public Button lineOfFireSituationSenderSelector;
     private Button btnDistanceThousandsUp, btnDistanceThousandsDown;
     private Button btnDistanceHundredsUp, btnDistanceHundredsDown;
     private Button btnDistanceDozensUp, btnDistanceDozensDown;
@@ -389,6 +390,7 @@ public class FlyOutContainer extends RelativeLayout {
 	    dozensText = (TextView)  findViewById(R.id.dozens);
 	    unitsText = (TextView)  findViewById(R.id.units);
 	    lineOfFireSituationSelector = (ImageView) findViewById(R.id.btn_line_of_fire_situation);
+	    lineOfFireSituationSenderSelector = (Button) findViewById(R.id.btn_line_of_fire_situation_send);
 	    
 	    /* text to speech */
 	    voiceOverBtn = (ImageView) findViewById(R.id.text_to_speech_enabler_button);

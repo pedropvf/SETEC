@@ -126,7 +126,7 @@ public class MainUI extends Activity implements SensorEventListener{
     private TextView thousandsText, hundredsText, dozensText, unitsText;
     private Button sendDistance;
     private LineOfFireSituation lineOfFireSituation=LineOfFireSituation.ACTIVE;
-    private Button lineOfFireSituationSelector;
+    private int lineOfFireDistanceSends=0;
 	
 	/* Compass */
 	private boolean targetMode=false;
@@ -456,15 +456,59 @@ public class MainUI extends Activity implements SensorEventListener{
 			    	Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_FIRELINE_GPS, (float)coords[0],  (float)coords[1]);
 			    	Log.d("lineOfFire", "Lat="+(float)coords[0]+"    Long= "+(float)coords[1]);
 			    	//TODO as coordenadAS estão a estourar
-			    	
 			    	root.vibrate(200);
 			    	root.resetDistance();
-			    	if(language==UILanguage.EN){
-				    	toastMessage("Distance reported.",Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
-			    	} else if (language==UILanguage.PT){
-				    	toastMessage("Distância reportada.",Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
+			    	lineOfFireDistanceSends++;
+			    	if(lineOfFireDistanceSends<3){
+			    		String m=new String();
+				    	if(language==UILanguage.EN){
+					    	m=new String("Distance reported. Please repeat "+(3-lineOfFireDistanceSends)+" time(s).");
+				    	} else if (language==UILanguage.PT){
+				    		m=new String("Distância reportada. Por favor reenvie mais "+(3-lineOfFireDistanceSends)+" vez(es).");
+				    	}
+				    	toastMessage(m,Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
+			    	} else {
+			    		lineOfFireDistanceSends=0;
+			    		if(language==UILanguage.EN){
+			    			toastMessage("Distance reported.",Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
+				    	} else if (language==UILanguage.PT){
+				    		toastMessage("Distância reportada.",Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
+				    	}
 			    	}
 		    	}
+		    }
+		});
+	    root.lineOfFireSituationSenderSelector.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	int lineOfFireSituationCode=0;
+		    	switch (lineOfFireSituation){
+		    	case ACTIVE:
+		    		lineOfFireSituationCode=0;
+		    		break;
+		    	case CONTROLLED:
+		    		lineOfFireSituationCode=1;
+		    		break;
+		    	case VIGILLANCE:
+		    		lineOfFireSituationCode=2;
+		    		break;
+		    	case DELETED:
+		    		lineOfFireSituationCode=3;
+		    		break;
+		    	}
+		    	
+		    	
+		    	root.vibrate(200);
+		    	root.resetDistance();
+		    	if(language==UILanguage.EN){
+			    	toastMessage("Line of Fire Situation reported.",Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
+		    	} else if (language==UILanguage.PT){
+			    	toastMessage("Situação da Linha de Fogo reportada.",Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
+		    	}
+		    	
+		    	Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_FIRELINE_STATUS, lineOfFireSituationCode);
+		    	Log.d("lineOfFire", "Line of fire="+lineOfFireSituationCode);
+		    	
 		    }
 		});
 	    logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -1419,56 +1463,6 @@ public class MainUI extends Activity implements SensorEventListener{
 			case CommEnumerators.HOUSE_BURNED:
 				sb=new StringBuilder(prefix).append(Integer.toString(predefinedMessageCode));
 				root.toastMessage(sb.toString(), Toast.LENGTH_SHORT, 0, 0);
-				break;
-		}
-	}
-	public void sendInfoToBackend(int infoCode){
-		switch(infoCode){
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_CO:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS_AND_HEART_RATE:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS_AND_CO:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_AND_CO:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS_AND_HEART_RATE_AND_CO:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGIN:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGOUT:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_FIRELINE_GPS:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_PREDEFINED_MESSAGE:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_MESSGAGE:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_SOS:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_SURROUNDED_BY_FLAMES:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_FIRELINE_GPS_UPDATE:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_TEAM_UPDATE:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_CO_ALERT:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_DEAD_MAN_ALERT:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_ACCEPTS_REQUEST:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_DENIES_REQUEST:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_LOW_BATTERY:
-				break;
-			case CommEnumerators.FIREFIGHTER_TO_COMMAND_DENIES_ID:
 				break;
 		}
 	}
