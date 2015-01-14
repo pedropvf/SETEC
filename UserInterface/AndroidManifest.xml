@@ -69,6 +69,12 @@
         <service
             android:name="setec.g3.heart.BluetoothLeService"
             android:enabled="true" />
+        
+        <receiver android:name=".BatteryLowReceiver">
+         	<intent-filter>
+            	<action android:name="android.intent.action.BATTERY_LOW" />
+        	</intent-filter>
+ 		</receiver>
     </application>
 
 </manifest>

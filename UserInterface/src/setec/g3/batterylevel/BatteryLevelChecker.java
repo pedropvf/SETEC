@@ -37,7 +37,7 @@ public class BatteryLevelChecker {
               do {  
                 batteryLevelUpdate();  
                 try {  
-                        Thread.sleep(1000);  
+                        Thread.sleep(300000);  
                    } catch (InterruptedException e) {  
                         // TODO Auto-generated catch block  
                         e.printStackTrace();  

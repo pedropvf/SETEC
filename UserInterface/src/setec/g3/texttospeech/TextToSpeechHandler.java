@@ -29,7 +29,7 @@ public class TextToSpeechHandler {
 				  			// tts.setPitch(5); // set pitch level
 	
 				  			// tts.setSpeechRate(2); // set speech speed rate
-				  			speakOut("Bem vindo e boa sorte!");
+				  			speakOut("Olá. O meu nome é Siomara e serei a sua guia por hoje. Boa sorte!");
 				  			if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 				  				Log.e("TTS", "Language is not supported");
 				  			} 

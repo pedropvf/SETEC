@@ -2125,8 +2125,8 @@ public class MainUI extends Activity implements SensorEventListener{
 					@Override
 					public void run() {
 						AlertDialog.Builder alert = new Builder(ctx);
-						alert.setTitle("Battery Low");
-						alert.setMessage("Please Recharge!");
+						alert.setTitle("Bateria Fraca");
+						alert.setMessage("Bateria Fraca!");
 						alert.setNeutralButton("OK", null);
 						alert.show();
 					}

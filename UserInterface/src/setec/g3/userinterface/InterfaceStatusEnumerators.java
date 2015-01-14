@@ -24,7 +24,9 @@ public final class InterfaceStatusEnumerators {
 	/* Constants */
 	
 	/* user interface flyout margins */
-	public static final int secondaryMargin = 150;
+	public static final int dialDiameter = 700;
+	public static final int flowIconsDiameter = 150;
+	public static final int secondaryMargin = 200;
 	public static float downOffset=100;
 	
 	/* vibration */
@@ -33,7 +35,7 @@ public final class InterfaceStatusEnumerators {
 	static public int combatModeVibrationDuration=1000;
 	
 	/* Animation constants */
-	public static final int secondaryViewAnimationDuration = 600;
+	public static final int secondaryViewAnimationDuration = 400;
 	public static final int secondaryViewAnimationPollingInterval = 16;
 	
 	/* time under operation */
@@ -50,6 +52,7 @@ public final class InterfaceStatusEnumerators {
 	/* movement handling */
 	public static final int dialAnimationPollingInterval = 10;
 	public static final int dialReturningAnimationDuration = 200;
-	public static final int dialMovementMaxRadius = 250;
+	public static final int dialMovementMaxRadius = dialDiameter/2;
+	public static final int iconSnapRadius=100;
 	public static final long dialAnimationInDuration = 300;
 }

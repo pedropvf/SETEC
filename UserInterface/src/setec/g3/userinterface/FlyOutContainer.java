@@ -178,7 +178,6 @@ public class FlyOutContainer extends RelativeLayout {
 	private float actionDialCircleWidth,actionDialCircleHeight;
 	private float actionDialCircleBaseX,actionDialCircleBaseY;
 	private float distanceFromCenter;
-	private float iconSnapRadius;
 	
 	/* dial line of fire icon (N) */
 	private ImageView lineOfFireIcon;
@@ -403,14 +402,13 @@ public class FlyOutContainer extends RelativeLayout {
 	 * to set the UI
 	 */
 	 public void prepareUI(){
-		iconSnapRadius=100;
 		
 		/* dial base */
 		RelativeLayout.LayoutParams paramsDialer = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		paramsDialer.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		paramsDialer.addRule(RelativeLayout.CENTER_VERTICAL);
-		paramsDialer.height = 600;
-		paramsDialer.width = 600;
+		paramsDialer.height = InterfaceStatusEnumerators.dialDiameter;
+		paramsDialer.width = InterfaceStatusEnumerators.dialDiameter;
 	    actionDialCircle.setLayoutParams(paramsDialer);
 	    actionDialCircle.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 	    actionDialCircle.setImageResource(R.drawable.dialer_base);
@@ -464,8 +462,8 @@ public class FlyOutContainer extends RelativeLayout {
 		
 		/* flow buttons parameters */
 		RelativeLayout.LayoutParams paramsFlowIcons = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		paramsFlowIcons.height = 100;
-		paramsFlowIcons.width = 100;
+		paramsFlowIcons.height = InterfaceStatusEnumerators.flowIconsDiameter;
+		paramsFlowIcons.width = InterfaceStatusEnumerators.flowIconsDiameter;
 		backToMainBtn.setLayoutParams(paramsFlowIcons);
 		backToMainBtn.setVisibility(View.INVISIBLE);
 		
@@ -644,23 +642,28 @@ public class FlyOutContainer extends RelativeLayout {
 										toggleLineOfFireView();
 										vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
 										setCompassMode(compassState.INVISIBLE);
+										actionDial.setVisibility(View.INVISIBLE);
 										break;
 									case MESSAGE:
 										toggleMessagesView();
 										vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
 										setCompassMode(compassState.INVISIBLE);
+										actionDial.setVisibility(View.INVISIBLE);
 										break;
 									case SETTINGS:
 										toggleSettingsView();
 										vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
 										setCompassMode(compassState.INVISIBLE);
+										actionDial.setVisibility(View.INVISIBLE);
 										break;
 									case PRE_DEFINED_MESSAGES:
 										togglePreDefinedMessagesView();
 										vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
 										setCompassMode(compassState.INVISIBLE);
+										actionDial.setVisibility(View.INVISIBLE);
 										break;
 									case UNSELECTED:
+										actionDial.setVisibility(View.VISIBLE);
 										if(compassEnabled){
 											setCompassMode(compassState.DIAL_OFF);
 										} else {
@@ -682,6 +685,7 @@ public class FlyOutContainer extends RelativeLayout {
 		backToMainBtn.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
+				actionDial.setVisibility(View.VISIBLE);
 				vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
 		    	switch (dialSelection){
 				case LINE_OF_FIRE:
@@ -2523,7 +2527,7 @@ public class FlyOutContainer extends RelativeLayout {
 				dialState=dialDisplayState.OPENING;
 			} else if ( actioDialCurrentState==actioDialStateEnum.MOVING ){
 				float pos[]=trimRadialMovement((x - actionDialWidth/2.0f), (y - actionDialHeight/*/2.0f*/), actionDialBaseX, actionDialBaseY, (float)InterfaceStatusEnumerators.dialMovementMaxRadius);
-				if(assertSnapDistance( pos[0], pos[1], lineOfFireIconBaseX, lineOfFireIconBaseY, iconSnapRadius)){
+				if(assertSnapDistance( pos[0], pos[1], lineOfFireIconBaseX, lineOfFireIconBaseY, InterfaceStatusEnumerators.iconSnapRadius)){
 					pos[0]=lineOfFireIconBaseX - ( (actionDialWidth-lineOfFireIconWidth) / 2 );
 					pos[1]=lineOfFireIconBaseY - ( (actionDialHeight-lineOfFireIconHeight) / 2 );
 					dialSelection=dialSelectionSate.LINE_OF_FIRE;
@@ -2535,7 +2539,7 @@ public class FlyOutContainer extends RelativeLayout {
 					setCompassAngle(0.0f);
 					actionDial.setImageResource(R.drawable.dial_selected);
 					disableCombatModeAnimation();
-				} else if(assertSnapDistance( pos[0], pos[1], messagesIconBaseX, messagesIconBaseY, iconSnapRadius)){
+				} else if(assertSnapDistance( pos[0], pos[1], messagesIconBaseX, messagesIconBaseY, InterfaceStatusEnumerators.iconSnapRadius)){
 					pos[0]=messagesIconBaseX - ( (actionDialWidth-messagesIconWidth) / 2 );
 					pos[1]=messagesIconBaseY - ( (actionDialHeight-messagesIconHeight) / 2 );
 					dialSelection=dialSelectionSate.MESSAGE;
@@ -2547,7 +2551,7 @@ public class FlyOutContainer extends RelativeLayout {
 					setCompassAngle(90.0f);
 					actionDial.setImageResource(R.drawable.dial_selected);
 					disableCombatModeAnimation();
-				} else if(assertSnapDistance( pos[0], pos[1], settingsIconBaseX, settingsIconBaseY, iconSnapRadius)){
+				} else if(assertSnapDistance( pos[0], pos[1], settingsIconBaseX, settingsIconBaseY, InterfaceStatusEnumerators.iconSnapRadius)){
 					pos[0]=settingsIconBaseX - ( (actionDialWidth-settingsIconWidth) / 2 );
 					pos[1]=settingsIconBaseY - ( (actionDialHeight-settingsIconHeight) / 2 );
 					dialSelection=dialSelectionSate.SETTINGS;
@@ -2559,7 +2563,7 @@ public class FlyOutContainer extends RelativeLayout {
 					setCompassAngle(180.0f);
 					actionDial.setImageResource(R.drawable.dial_selected);
 					disableCombatModeAnimation();
-				} else if(assertSnapDistance( pos[0], pos[1], preDefMessagesIconBaseX, preDefMessagesIconBaseY, iconSnapRadius)){
+				} else if(assertSnapDistance( pos[0], pos[1], preDefMessagesIconBaseX, preDefMessagesIconBaseY, InterfaceStatusEnumerators.iconSnapRadius)){
 					pos[0]=preDefMessagesIconBaseX - ( (actionDialWidth-preDefMessagesIconWidth) / 2 );
 					pos[1]=preDefMessagesIconBaseY - ( (actionDialHeight-preDefMessagesIconHeight) / 2 );
 					dialSelection=dialSelectionSate.PRE_DEFINED_MESSAGES;
