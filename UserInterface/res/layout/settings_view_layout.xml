@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#246F8F" >
+
+    <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="20dp"
+         android:gravity="center_vertical|center_horizontal"
+         android:orientation="horizontal" >
+        
+         <ImageView
+	            android:id="@+id/language_selector"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+	            android:src="@drawable/language_pt" />
+         
+         <TextView
+                android:id="@+id/language_selector_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="Língua: PT" />
+         
+         </LinearLayout>
+    
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="10dp"
+         android:gravity="center_vertical|center_horizontal"
+         android:orientation="horizontal" >
+        
+         <ImageView
+	            android:id="@+id/compass_enabler_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+	            android:src="@drawable/compass_enabler_on" />
+         
+         <TextView
+                android:id="@+id/compass_enabler_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="Compass: Enabled" />
+         
+         </LinearLayout>
+    
+		<LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="10dp"
+         android:gravity="center_vertical|center_horizontal"
+         android:orientation="horizontal" >
+        
+         <ImageView
+	            android:id="@+id/text_to_speech_enabler_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+	            android:src="@drawable/text_to_speech_enabler_on" />
+         
+         <TextView
+                android:id="@+id/text_to_speech_enabler_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="Voice Over: Enabled" />
+         
+         </LinearLayout>
+     
+     
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+	            android:id="@+id/protocol_selector_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+	            android:src="@drawable/selector_protocol_g5" />
+
+            <TextView
+                android:id="@+id/protocol_selector_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:text="Protocol: G5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="right|center_vertical"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/logout_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/selector_logout" />
+
+            <Button
+                android:id="@+id/exit_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/selector_exit" />
+        </LinearLayout>    
+
+</LinearLayout>
