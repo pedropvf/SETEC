@@ -61,6 +61,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.renderscript.RenderScript.Priority;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -208,6 +211,10 @@ public class MainUI extends Activity implements SensorEventListener{
 	/* low battery */
 	BatteryLowReceiver batteryLow;
 	private BatteryLevelChecker bateryChecker;
+	
+	/*Network strength*/
+	TelephonyManager Tel;
+	MyPhoneStateListener MyListener;
 	/************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 	
@@ -526,6 +533,11 @@ public class MainUI extends Activity implements SensorEventListener{
 	    protocolToggler.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
+		    	if(protocol == Protocol.PROTOCOL_G5){
+		    		protocol = Protocol.PROTOCOL_G6;
+		    	}else{
+		    		protocol = Protocol.PROTOCOL_G5;
+		    	}
 		    	root.vibrate(200);
 		    	toggleProtocol();
 		    }
@@ -659,6 +671,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		readNet = Login.readNet;
 		output = Login.output;
 		readProtocol = Login.readProtocol;
+		protocol = Login.protocolToUse;
 		
 		messageHandler = new Message();
 		messageHandler.setMainUIActivity(this);
@@ -671,9 +684,13 @@ public class MainUI extends Activity implements SensorEventListener{
 	}
 	
 	private void lowBatteryCreate(){
-		IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_LOW);
-		BatteryLowReceiver batteryLow = new BatteryLowReceiver();
-		registerReceiver(batteryLow, filter);
+		//comentei a recepção de pouca bateria
+		//IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_LOW);
+		//BatteryLowReceiver batteryLow = new BatteryLowReceiver();
+		//registerReceiver(batteryLow, filter);
+		MyListener = new MyPhoneStateListener();
+        Tel = ( TelephonyManager )getSystemService(Context.TELEPHONY_SERVICE);
+        Tel.listen(MyListener ,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 		
 		bateryChecker=new BatteryLevelChecker(this);
 	}
@@ -812,7 +829,10 @@ public class MainUI extends Activity implements SensorEventListener{
 		indicatorStates batteryStatus=indicatorStates.EMPTY;
 		if(percentage<=10){
 			batteryStatus=indicatorStates.EMPTY;
+			Log.d("BatteryLow", "The battery from the smartphone is very low.");
+			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOW_BATTERY);
 		} else if( (percentage>10) && (percentage<=30) ){
+			Log.d("BatteryLow", "The battery from the smartphone is low, <30%.");
 			batteryStatus=indicatorStates.LOW;
 		} else if( (percentage>30) && (percentage<=70) ){
 			batteryStatus=indicatorStates.MEDIUM;
@@ -1264,17 +1284,26 @@ public class MainUI extends Activity implements SensorEventListener{
 	    		protocol=Protocol.PROTOCOL_G6;
 	    		protocolToggler.setImageResource(R.drawable.selector_protocol_g6);
 	    		protocolTogglerText.setText("Protocol: G6");
-	    		readProtocol.setProtocol(protocol);
+	    		
+	    		//readProtocol.setProtocol(protocol);
 	    		//TODO propagate these changes to the classes below
 	    		break;
 	    	case PROTOCOL_G6:
 	    		protocol=Protocol.PROTOCOL_G5;
 	    		protocolToggler.setImageResource(R.drawable.selector_protocol_g5);
 	    		protocolTogglerText.setText("Protocol: G5");
-	    		readProtocol.setProtocol(protocol);
+	    		
+	    		//readProtocol.setProtocol(protocol);
 	    		//TODO propagate these changes to the classes below
 	    		break;
     	}	
+    	
+    	readProtocol.kill_thread();
+		//criar ReadProtocol object com protocol
+		readProtocol = new ReadProtocol(protocol, this, firemanID); //mudar para G6 se for o caso...
+		readProtocol.setMessageObject(messageHandler);
+		readProtocol.setLoginFlag(false);
+		readProtocol.start();
 	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/
@@ -2130,5 +2159,44 @@ public class MainUI extends Activity implements SensorEventListener{
 	    }
 	}
 	/*************************************************************************************************************************************
-	 ************************************************************************************************************************************/
+	 ***********************************************************************************************************************************/
+	
+	/*signal strength*/ 
+	
+	private class MyPhoneStateListener extends PhoneStateListener
+    {
+      /* Get the Signal strength from the provider, each tiome there is an update */
+      @Override
+      public void onSignalStrengthsChanged(SignalStrength signalStrength)
+      {
+         super.onSignalStrengthsChanged(signalStrength);
+         int statusWifi = 0;
+         int signalStrength_dBm = (2 * signalStrength.getGsmSignalStrength()) - 113;
+         
+         if(signalStrength_dBm < -107){
+        	 Log.d("Signal", "Sinal nivel 0");
+        	 statusWifi = 0;
+         }else if(signalStrength_dBm < -103){
+        	 Log.d("Signal", "Sinal nivel 1");
+        	 statusWifi = 1;
+         }else if(signalStrength_dBm < -98.5){
+        	 Log.d("Signal", "Sinal nivel 2");
+        	 statusWifi = 2;
+         }else if(signalStrength_dBm < -89.5){
+        	 Log.d("Signal", "Sinal nivel 3");
+        	 statusWifi = 3;
+         }else{
+        	 Log.d("Signal", "Sinal nivel 4");
+        	 statusWifi = 4;
+         }
+         
+         Toast.makeText(getApplicationContext(), "Signal strength = "
+            + String.valueOf(signalStrength_dBm), Toast.LENGTH_SHORT).show();
+         
+         //update indicator
+         updateWifiStatus(statusWifi);
+      }
+
+    };/*end of signal class*/
+    
 }

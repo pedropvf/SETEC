@@ -50,9 +50,9 @@ public class Login extends Activity {
 	public static byte firemanID;
 	public static ReadProtocol readProtocol;
 	public Message messageHandler;
-	public CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
+	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
 	
-	String host = new String("172.30.11.133");
+	String host = new String("192.168.1.101");
 	int port = 4444;
 	
 	/* ble extras */

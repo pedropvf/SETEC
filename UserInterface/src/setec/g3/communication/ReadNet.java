@@ -119,6 +119,13 @@ public class ReadNet extends Thread{
 				} catch (IOException e1) {
 					Log.e("ReadNet", "Error " + e1);
 				}
+				
+				if (isProtocolCreated == true){
+					// send message to protocol saying that GSM is connected
+					SendToProtocol s2 = new SendToProtocol((byte) 0x33,
+								(byte) 0x11, false, null );
+					s2.start();
+				}
 				return;
 			}
 		}

@@ -97,7 +97,7 @@ public class GPSTracker implements LocationListener {
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)gpsLocation.getLatitude(),(float)gpsLocation.getLongitude());
 		}catch (Exception e){
 			Log.e("posicao", e.toString());
-			showToast(e.toString());
+			//showToast(e.toString());
 		}
 	}
 	
