@@ -52,8 +52,8 @@ public class Login extends Activity {
 	public Message messageHandler;
 	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
 	
-	String host = new String("192.168.1.101");
-	int port = 4444;
+	String host = new String("89.155.157.127");
+	int port = 7851;
 	
 	/* ble extras */
 	String deviceName;
