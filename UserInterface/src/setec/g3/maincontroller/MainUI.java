@@ -296,7 +296,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		
 		// for the system's orientation sensor registered listeners
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
-		gps.initializeGPS();
+		//gps.initializeGPS();
 		//onResumeHwBluetoothSetUp();
 		onBleResume();
 	}
