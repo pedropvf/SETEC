@@ -52,7 +52,7 @@ public class Login extends Activity {
 	public Message messageHandler;
 	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
 	
-	String host = new String("89.155.157.127");
+	String host = new String("172.30.73.51");
 	int port = 7851;
 	
 	/* ble extras */

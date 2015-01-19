@@ -269,7 +269,7 @@ public class Message {
 	}
 
 	public static void send(byte messageType) {
-		// type 8,12,13,19,20,22 - duvida quanto ao 22
+		// type 8,12,13,19,20,22,25 - duvida quanto ao 22
 		//firemanID = MainUI.firemanID;
 		byte[] pfinal = new byte[] { messageType, firemanID };
 

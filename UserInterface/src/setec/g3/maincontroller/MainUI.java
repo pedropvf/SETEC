@@ -974,6 +974,9 @@ public class MainUI extends Activity implements SensorEventListener{
 		public void run() {
 			Location location=gps.getLocation();
 			if(location!=null){ 
+				
+				double tolerancia=20; // Fronteira para considerar que o bombeiro chegou ao destino
+				
 				double Mlat= location.getLatitude();
 				double Mlong= location.getLongitude();
 			
@@ -984,11 +987,20 @@ public class MainUI extends Activity implements SensorEventListener{
 				Deltalat=(float) (Math.PI*Deltalat*((float)rt)/180);
 				
 				double dist=Math.sqrt(Deltalong*Deltalong + Deltalat*Deltalat);
+				
+				if(dist<=tolerancia){
+		
+					Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_REACH_DESTINATION);
+					
+					//falta por aqui a função para sair do modo guia
+				}
+				
 				root.postDistanceToObjective(dist);
 				
 			} else {
 				//nothing
 			}
+			
 			gpsDistanceHandler.postDelayed(this, gpsDistanceRunnableDelta);
 		}
 	}

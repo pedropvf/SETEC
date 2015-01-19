@@ -38,6 +38,8 @@ public class CommEnumerators {
 	public static final int FIREFIGHTER_TO_COMMAND_DENIES_REQUEST=20;
 	public static final int FIREFIGHTER_TO_COMMAND_LOW_BATTERY=21;
 	public static final int FIREFIGHTER_TO_COMMAND_DENIES_ID=22;
+	public static final int FIREFIGHTER_TO_COMMAND_REACH_DESTINATION=25;
+	
 	
 	public static final int COMMAND_TO_FIREFIGHTER_PREDEFINED_MESSAGE=128;
 	public static final int COMMAND_TO_FIREFIGHTER_MESSAGE=129;
@@ -47,5 +49,6 @@ public class CommEnumerators {
 	public static final int COMMAND_TO_FIREFIGHTER_LOGIN_DENIED=133;
 	public static final int COMMAND_TO_FIREFIGHTER_LOGING_ACCEPTED=134;
 	public static final int COMMAND_TO_FIREFIGHTER_GO_TO_COORDINATE=135;
+	
 	
 }
