@@ -413,7 +413,11 @@ public class FlyOutContainer extends RelativeLayout {
 		paramsDialer.width = InterfaceStatusEnumerators.dialDiameter;
 	    actionDialCircle.setLayoutParams(paramsDialer);
 	    actionDialCircle.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-	    actionDialCircle.setImageResource(R.drawable.dialer_base);
+	    if(parentClass.userLevel==userRanks.COMMANDER){
+	    	actionDialCircle.setImageResource(R.drawable.dialer_base);
+	    } else {
+	    	actionDialCircle.setImageResource(R.drawable.dialer_base_operational);
+	    }
 	    actionDialCircleWidth=actionDialCircle.getLayoutParams().width;
 		actionDialCircleHeight=actionDialCircle.getLayoutParams().height;
 		actionDialCircleBaseX = center[0] - actionDialCircleWidth/2.0f;
@@ -1626,39 +1630,41 @@ public class FlyOutContainer extends RelativeLayout {
 		float minimumBorderSpace = ( (float) InterfaceStatusEnumerators.secondaryMargin - lineOfFireIconWidth ) / 2.0f;
 		switch (dialSelection){
 		case LINE_OF_FIRE:
-			backBtnX=minimumBorderSpace;
-			backBtnY=minimumBorderSpace;
-			
-			backToOption1BtnX=backBtnX + lineOfFireIconWidth + minimumBorderSpace*2;
-			backToOption1BtnY=backBtnY;
-			
-			backToOption2BtnX=backToOption1BtnX + lineOfFireIconWidth + minimumBorderSpace/2;
-			backToOption2BtnY=backBtnY;
-			
-			backToOption3BtnX=backToOption2BtnX + lineOfFireIconWidth + minimumBorderSpace/2;
-			backToOption3BtnY=backBtnY;
-			
-			backToMainBtn.setX(backBtnX);
-			backToMainBtn.setY(backBtnY);
-			
-			backToMessageBtn.setX(backToOption1BtnX);
-			backToMessageBtn.setY(backToOption1BtnY);
-			
-			backToPreDefinedMessageBtn.setX(backToOption2BtnX);
-			backToPreDefinedMessageBtn.setY(backToOption2BtnY);
-			
-			backToSettingsBtn.setX(backToOption3BtnX);
-			backToSettingsBtn.setY(backToOption3BtnY);
-			
-			backToMainBtn.setVisibility(View.VISIBLE);
-			/*backToLineOfFireBtn.setVisibility(View.VISIBLE);*/
-			backToSettingsBtn.setVisibility(View.VISIBLE);
-			backToPreDefinedMessageBtn.setVisibility(View.VISIBLE);
-			backToMessageBtn.setVisibility(View.VISIBLE);
-			/* sos handle */
-			sosSliderBase.setVisibility(View.INVISIBLE);
-			sosHandle.setVisibility(View.INVISIBLE);
-			prioritySelector.setVisibility(View.INVISIBLE);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backBtnX=minimumBorderSpace;
+				backBtnY=minimumBorderSpace;
+				
+				backToOption1BtnX=backBtnX + lineOfFireIconWidth + minimumBorderSpace*2;
+				backToOption1BtnY=backBtnY;
+				
+				backToOption2BtnX=backToOption1BtnX + lineOfFireIconWidth + minimumBorderSpace/2;
+				backToOption2BtnY=backBtnY;
+				
+				backToOption3BtnX=backToOption2BtnX + lineOfFireIconWidth + minimumBorderSpace/2;
+				backToOption3BtnY=backBtnY;
+				
+				backToMainBtn.setX(backBtnX);
+				backToMainBtn.setY(backBtnY);
+				
+				backToMessageBtn.setX(backToOption1BtnX);
+				backToMessageBtn.setY(backToOption1BtnY);
+				
+				backToPreDefinedMessageBtn.setX(backToOption2BtnX);
+				backToPreDefinedMessageBtn.setY(backToOption2BtnY);
+				
+				backToSettingsBtn.setX(backToOption3BtnX);
+				backToSettingsBtn.setY(backToOption3BtnY);
+				
+				backToMainBtn.setVisibility(View.VISIBLE);
+				/*backToLineOfFireBtn.setVisibility(View.VISIBLE);*/
+				backToSettingsBtn.setVisibility(View.VISIBLE);
+				backToPreDefinedMessageBtn.setVisibility(View.VISIBLE);
+				backToMessageBtn.setVisibility(View.VISIBLE);
+				/* sos handle */
+				sosSliderBase.setVisibility(View.INVISIBLE);
+				sosHandle.setVisibility(View.INVISIBLE);
+				prioritySelector.setVisibility(View.INVISIBLE);
+			}
 			break;
 		case MESSAGE:
 			backBtnX=widthAndHeight[0]-minimumBorderSpace-lineOfFireIconWidth;
@@ -1676,21 +1682,31 @@ public class FlyOutContainer extends RelativeLayout {
 			backToMainBtn.setX(backBtnX);
 			backToMainBtn.setY(backBtnY);
 			
-			backToLineOfFireBtn.setX(backToOption1BtnX);
-			backToLineOfFireBtn.setY(backToOption1BtnY);
-			
-			backToPreDefinedMessageBtn.setX(backToOption2BtnX);
-			backToPreDefinedMessageBtn.setY(backToOption2BtnY);
-			
-			backToSettingsBtn.setX(backToOption3BtnX);
-			backToSettingsBtn.setY(backToOption3BtnY);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backToLineOfFireBtn.setX(backToOption1BtnX);
+				backToLineOfFireBtn.setY(backToOption1BtnY);
+				
+				backToPreDefinedMessageBtn.setX(backToOption2BtnX);
+				backToPreDefinedMessageBtn.setY(backToOption2BtnY);
+				
+				backToSettingsBtn.setX(backToOption3BtnX);
+				backToSettingsBtn.setY(backToOption3BtnY);
+			} else {
+				backToPreDefinedMessageBtn.setX(backToOption1BtnX);
+				backToPreDefinedMessageBtn.setY(backToOption1BtnY);
+				
+				backToSettingsBtn.setX(backToOption2BtnX);
+				backToSettingsBtn.setY(backToOption2BtnY);
+			}
 			
 			/* priority selector */
 			prioritySelector.setX(backBtnX);
 			prioritySelector.setY(backToOption3BtnY + lineOfFireIconHeight + minimumBorderSpace*4);
 			
 			backToMainBtn.setVisibility(View.VISIBLE);
-			backToLineOfFireBtn.setVisibility(View.VISIBLE);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backToLineOfFireBtn.setVisibility(View.VISIBLE);
+			}
 			backToSettingsBtn.setVisibility(View.VISIBLE);
 			backToPreDefinedMessageBtn.setVisibility(View.VISIBLE);
 			/*backToMessageBtn.setVisibility(View.VISIBLE);*/
@@ -1716,17 +1732,27 @@ public class FlyOutContainer extends RelativeLayout {
 			backToMainBtn.setX(backBtnX);
 			backToMainBtn.setY(backBtnY);
 			
-			backToLineOfFireBtn.setX(backToOption1BtnX);
-			backToLineOfFireBtn.setY(backToOption1BtnY);
-			
-			backToMessageBtn.setX(backToOption2BtnX);
-			backToMessageBtn.setY(backToOption2BtnY);
-			
-			backToPreDefinedMessageBtn.setX(backToOption3BtnX);
-			backToPreDefinedMessageBtn.setY(backToOption3BtnY);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backToLineOfFireBtn.setX(backToOption1BtnX);
+				backToLineOfFireBtn.setY(backToOption1BtnY);
+				
+				backToMessageBtn.setX(backToOption2BtnX);
+				backToMessageBtn.setY(backToOption2BtnY);
+				
+				backToPreDefinedMessageBtn.setX(backToOption3BtnX);
+				backToPreDefinedMessageBtn.setY(backToOption3BtnY);
+			} else {
+				backToMessageBtn.setX(backToOption1BtnX);
+				backToMessageBtn.setY(backToOption1BtnY);
+				
+				backToPreDefinedMessageBtn.setX(backToOption2BtnX);
+				backToPreDefinedMessageBtn.setY(backToOption2BtnY);
+			}
 			
 			backToMainBtn.setVisibility(View.VISIBLE);
-			backToLineOfFireBtn.setVisibility(View.VISIBLE);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backToLineOfFireBtn.setVisibility(View.VISIBLE);
+			}
 			/*backToSettingsBtn.setVisibility(View.VISIBLE);*/
 			backToPreDefinedMessageBtn.setVisibility(View.VISIBLE);
 			backToMessageBtn.setVisibility(View.VISIBLE);
@@ -1750,18 +1776,28 @@ public class FlyOutContainer extends RelativeLayout {
 			
 			backToMainBtn.setX(backBtnX);
 			backToMainBtn.setY(backBtnY);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backToLineOfFireBtn.setX(backToOption1BtnX);
+				backToLineOfFireBtn.setY(backToOption1BtnY);
+				
+				backToMessageBtn.setX(backToOption2BtnX);
+				backToMessageBtn.setY(backToOption2BtnY);
+				
+				backToSettingsBtn.setX(backToOption3BtnX);
+				backToSettingsBtn.setY(backToOption3BtnY);
+			} else {
+				backToMessageBtn.setX(backToOption1BtnX);
+				backToMessageBtn.setY(backToOption1BtnY);
+				
+				backToSettingsBtn.setX(backToOption2BtnX);
+				backToSettingsBtn.setY(backToOption2BtnY);
+			}
 			
-			backToLineOfFireBtn.setX(backToOption1BtnX);
-			backToLineOfFireBtn.setY(backToOption1BtnY);
-			
-			backToMessageBtn.setX(backToOption2BtnX);
-			backToMessageBtn.setY(backToOption2BtnY);
-			
-			backToSettingsBtn.setX(backToOption3BtnX);
-			backToSettingsBtn.setY(backToOption3BtnY);
 			
 			backToMainBtn.setVisibility(View.VISIBLE);
-			backToLineOfFireBtn.setVisibility(View.VISIBLE);
+			if(parentClass.userLevel==userRanks.COMMANDER){
+				backToLineOfFireBtn.setVisibility(View.VISIBLE);
+			}
 			backToSettingsBtn.setVisibility(View.VISIBLE);
 			/*backToPreDefinedMessageBtn.setVisibility(View.VISIBLE);*/
 			backToMessageBtn.setVisibility(View.VISIBLE);
@@ -2499,7 +2535,9 @@ public class FlyOutContainer extends RelativeLayout {
 				actionDial.setImageResource(R.drawable.dial_on);
 				
 				/* then schedule the animation */
-				lineOfFireIcon.animate().alpha(1.0f).setDuration(InterfaceStatusEnumerators.dialAnimationInDuration);
+				if(parentClass.userLevel==userRanks.COMMANDER){
+					lineOfFireIcon.animate().alpha(1.0f).setDuration(InterfaceStatusEnumerators.dialAnimationInDuration);
+				}
 				messagesIcon.animate().alpha(1.0f).setDuration(InterfaceStatusEnumerators.dialAnimationInDuration);
 				settingsIcon.animate().alpha(1.0f).setDuration(InterfaceStatusEnumerators.dialAnimationInDuration);
 				preDefMessagesIcon.animate().alpha(1.0f).setDuration(InterfaceStatusEnumerators.dialAnimationInDuration);
@@ -2520,7 +2558,9 @@ public class FlyOutContainer extends RelativeLayout {
 				settingsIcon.setY(settingsIconBaseY);
 				preDefMessagesIcon.setX(preDefMessagesIconBaseX);
 				preDefMessagesIcon.setY(preDefMessagesIconBaseY);
-				lineOfFireIcon.setVisibility(View.VISIBLE);
+				if(parentClass.userLevel==userRanks.COMMANDER){
+					lineOfFireIcon.setVisibility(View.VISIBLE);
+				}
 				messagesIcon.setVisibility(View.VISIBLE);
 				settingsIcon.setVisibility(View.VISIBLE);
 				preDefMessagesIcon.setVisibility(View.VISIBLE);
@@ -2529,7 +2569,7 @@ public class FlyOutContainer extends RelativeLayout {
 				dialState=dialDisplayState.OPENING;
 			} else if ( actioDialCurrentState==actioDialStateEnum.MOVING ){
 				float pos[]=trimRadialMovement((x - actionDialWidth/2.0f), (y - actionDialHeight/*/2.0f*/), actionDialBaseX, actionDialBaseY, (float)InterfaceStatusEnumerators.dialMovementMaxRadius);
-				if(assertSnapDistance( pos[0], pos[1], lineOfFireIconBaseX, lineOfFireIconBaseY, InterfaceStatusEnumerators.iconSnapRadius)){
+				if((parentClass.userLevel==userRanks.COMMANDER)&&(assertSnapDistance( pos[0], pos[1], lineOfFireIconBaseX, lineOfFireIconBaseY, InterfaceStatusEnumerators.iconSnapRadius))){
 					pos[0]=lineOfFireIconBaseX - ( (actionDialWidth-lineOfFireIconWidth) / 2 );
 					pos[1]=lineOfFireIconBaseY - ( (actionDialHeight-lineOfFireIconHeight) / 2 );
 					dialSelection=dialSelectionSate.LINE_OF_FIRE;

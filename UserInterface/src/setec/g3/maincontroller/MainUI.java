@@ -32,8 +32,10 @@ import setec.g3.userinterface.InterfaceStatusEnumerators.indicatorStates;
 import setec.g3.userinterface.InterfaceStatusEnumerators.userRanks;
 import setec.g3.userinterface.InterfaceStatusEnumerators.utilityStates;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -46,6 +48,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Sensor;
@@ -87,7 +90,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	 *************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 	/* app usage control */
-	private userRanks userLevel;
+	public userRanks userLevel;
 	public Context context;
 	public UILanguage language=UILanguage.PT;
 	
@@ -466,12 +469,12 @@ public class MainUI extends Activity implements SensorEventListener{
 			    	root.vibrate(200);
 			    	root.resetDistance();
 			    	lineOfFireDistanceSends++;
-			    	if(lineOfFireDistanceSends<3){
+			    	if(lineOfFireDistanceSends<2){
 			    		String m=new String();
 				    	if(language==UILanguage.EN){
-					    	m=new String("Distance reported. Please repeat "+(3-lineOfFireDistanceSends)+" time(s).");
+					    	m=new String("Distance reported. Please repeat "+(2-lineOfFireDistanceSends)+" time(s).");
 				    	} else if (language==UILanguage.PT){
-				    		m=new String("DistÃ¢ncia reportada. Por favor reenvie mais "+(3-lineOfFireDistanceSends)+" vez(es).");
+				    		m=new String("DistÃ¢ncia reportada. Por favor reenvie mais "+(2-lineOfFireDistanceSends)+" vez(es).");
 				    	}
 				    	toastMessage(m,Toast.LENGTH_SHORT, 0, (int)(center[1]*2-500));
 			    	} else {
@@ -992,7 +995,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		
 					Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_REACH_DESTINATION);
 					
-					//falta por aqui a função para sair do modo guia
+					//falta por aqui a funï¿½ï¿½o para sair do modo guia
 				}
 				
 				root.postDistanceToObjective(dist);
@@ -1263,9 +1266,35 @@ public class MainUI extends Activity implements SensorEventListener{
 	 * For logging out. Returns to the log in window, but remains connected to the grid. (TODO verify if this works like this)
 	 */
 	private void logout(){
-		Intent loginIntent = new Intent(MainUI.this,Login.class);
-		MainUI.this.startActivity(loginIntent);
-		MainUI.this.finish();
+		Context c=this.getApplicationContext();
+		try {
+            //check if the context is given
+            if (c != null) {
+                //fetch the packagemanager so we can get the default launch activity 
+                // (you can replace this intent with any other activity if you want
+                PackageManager pm = c.getPackageManager();
+                //check if we got the PackageManager
+                if (pm != null) {
+                    //create the intent with the default start activity for your application
+                    Intent mStartActivity = new Intent(MainUI.this,Login.class);
+                    mStartActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					//create a pending intent so the application is restarted after System.exit(0) was called. 
+					// We use an AlarmManager to call this intent in 100ms
+					int mPendingIntentId = 223344;
+					PendingIntent mPendingIntent = PendingIntent.getActivity(c, mPendingIntentId, mStartActivity,PendingIntent.FLAG_CANCEL_CURRENT);
+					AlarmManager mgr = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+					mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+					//kill the application
+					System.exit(0);
+                } else {
+                    Log.e("LOGOUT", "Was not able to restart application, PM null");
+                }
+            } else {
+                Log.e("LOGOUT", "Was not able to restart application, Context null");
+            }
+        } catch (Exception ex) {
+            Log.e("LOGOUT", "Was not able to restart application");
+        }
 	}
 	/*
 	 * For app termination
