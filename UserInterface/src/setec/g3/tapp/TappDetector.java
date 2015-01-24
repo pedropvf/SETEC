@@ -15,6 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Display;
@@ -60,6 +61,12 @@ public class TappDetector implements SensorEventListener{
 	private long currentDeadManTime = 0;
 	private long deadManTimeMilis = 30000;
 	float[] gravity = new float[3];
+	
+	Handler h = new Handler();
+	int delay = 30000; //milliseconds
+	int ok_reproduced=0;
+	Runnable runnable;
+
 	
 	/* to control */
 	MainUI parentClass;
@@ -132,6 +139,11 @@ public class TappDetector implements SensorEventListener{
 	        float x = event.values[0] - gravity[0];
 	        float y = event.values[1] - gravity[1];
 	        float z = event.values[2] - gravity[2];
+	        
+	        float xg = event.values[0];
+	        float yg = event.values[1];
+	        float zg = event.values[2];	        
+	        
 	    	
 	    	/*old code
 	    	float x = (float) (event.values[0]);
@@ -154,7 +166,7 @@ public class TappDetector implements SensorEventListener{
 	            float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
 
 	            
-	            if (abs_acc < DEAD_MAN_THRESHOLD){
+	            if ((zg > 9.5) && (xg < 2 ) && (yg < 2)){
 	           	    if(trackDeadMan==false){
 	            		deadManPhase=1;
 		            	trackDeadMan=true;
@@ -265,6 +277,7 @@ public class TappDetector implements SensorEventListener{
 	            	{
 	            		Log.d("coisa" , "OK message");
 	            		parentClass.speak("OK");
+	            		ok_reproduced=1;
 	            		ok=0;
 	            	}
 	            	
@@ -319,6 +332,31 @@ public class TappDetector implements SensorEventListener{
 	    }else if(event.sensor.getType()==Sensor.TYPE_PROXIMITY){
 	     float prox = event.values[0];
 	    }
+	    
+	    if((setec.g3.maincontroller.MainUI.waiting_ok==1) && (ok_reproduced==0))
+	    {
+	        if(h == null) {
+	            h = new Handler();
+	         }
+			runnable = new Runnable(){
+	    	    public void run(){
+	    	        //send message again
+	    	        
+	    	        if(ok_reproduced==1)
+	    	        {
+	    	        	h.removeCallbacksAndMessages(runnable);
+	    	        }
+	    	        else
+	    	        {
+	    	        	//repetir mensagem
+	    	        	h.postDelayed(this, 30000); 
+	    	        }
+	    	        
+	    	    }
+	    	};
+	    	h.postDelayed(runnable, 30000); 
+	    }
+	    
 	}
 
 	@Override
