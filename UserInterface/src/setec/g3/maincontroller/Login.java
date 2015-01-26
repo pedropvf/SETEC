@@ -34,6 +34,7 @@ public class Login extends Activity {
 	private static EditText userText;
 	private static EditText passText;
 	private EditText portText;
+	private EditText teamText;
 	private EditText ipText;
 	private LinearLayout connectForm, loginForm;
 	
@@ -86,6 +87,7 @@ public class Login extends Activity {
 		userText = (EditText) findViewById(R.id.login_user_tv);
 		passText = (EditText) findViewById(R.id.login_password);
 		portText = (EditText) findViewById(R.id.login_port);
+		teamText = (EditText) findViewById(R.id.EditTextTeam);
 		ipText = (EditText) findViewById(R.id.login_ip);
 		connectForm = (LinearLayout) findViewById(R.id.login_port_ip_form_layout);
 		loginForm = (LinearLayout) findViewById(R.id.login_form_layout);
@@ -170,13 +172,19 @@ public class Login extends Activity {
      */
 	private void login(){
 		//TODO
+		
+		//read the text the user provided by the login
 		//String user=userText.getText().toString().trim();
 		//String pass=passText.getText().toString().trim();
+		//String team = teamText.getText().toString().trim();
+		
 		String user = "11";
-		String pass = "mmsnsjd";
+		String pass = "test_pass";
+		String team = "1";
 		
 		//Send login information to backend
-		Message.send((byte)7,Integer.parseInt(user),pass);		
+		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_TEAM_UPDATE,Integer.parseInt(team));
+		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGIN,Integer.parseInt(user),pass);	
 		//wait for the backend to respond... it will receive the response in Message.receive (case 133 or 134)
 		//and will call loginResponse method
     }

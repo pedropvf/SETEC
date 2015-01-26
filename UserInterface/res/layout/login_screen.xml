@@ -105,6 +105,30 @@
             </RadioGroup>
             
     </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/login_team"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+            <TextView
+                android:id="@+id/TextViewTeam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Team"
+                android:textColor="#ffffff" />
+
+            <EditText
+                android:id="@+id/EditTextTeam"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textColor="#ffffff" />
+    </LinearLayout> 
 
     <LinearLayout
         android:id="@+id/login_port_ip_form_layout"
@@ -143,16 +167,8 @@
             android:ems="10"
             android:textColor="#ffffff" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/login_button_form_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal|clip_vertical"
-        android:orientation="vertical"
-        android:paddingTop="20dp" >
-
-    </LinearLayout>
+    
+ 
 
     <Button
         android:id="@+id/login_btn"
