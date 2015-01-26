@@ -218,6 +218,9 @@ public class MainUI extends Activity implements SensorEventListener{
 	/*Network strength*/
 	TelephonyManager Tel;
 	MyPhoneStateListener MyListener;
+	
+	
+	public static int waiting_ok;
 	/************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 	
@@ -1540,9 +1543,15 @@ public class MainUI extends Activity implements SensorEventListener{
 		this.playMessageReceived();
 		switch(infoCode){
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_PREDEFINED_MESSAGE:
+			{	
+				waiting_ok=1;
 				break;
+			}	
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_MESSAGE:
+			{
+				waiting_ok=1;
 				break;
+			}	
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_FIRELINE_UPDATE_REQUEST:
 				break;
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_TEAM_INFORMATION_REQUEST:
