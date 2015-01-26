@@ -107,6 +107,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	private ImageView protocolToggler;
 	private TextView protocolTogglerText;
 	private boolean isCommander;
+	private String team;
 	
 	private Message messageHandler;
 	
@@ -1257,7 +1258,13 @@ public class MainUI extends Activity implements SensorEventListener{
 		}
 		//put firemanID
 		firemanID = (byte)bundle.getInt("FIREMAN_ID");
-		Log.d("MainUI ", "" + ((int)firemanID));
+		team = bundle.getString("FIREMAN_TEAM");
+		if(team.equals("")==false){
+			//send team info to backend
+			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_TEAM_UPDATE, Integer.parseInt(team));
+			Log.d("MainUI", "Team = " + team);
+		}
+		Log.d("MainUI", "FiremanID = " + ((int)firemanID));
 	}
 	/*
 	 * Just sets the firemanID variable

@@ -52,6 +52,7 @@ public class Login extends Activity {
 	public static ReadProtocol readProtocol;
 	public Message messageHandler;
 	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
+	String team = "";
 	
 	String host = new String("172.30.73.51");
 	int port = 7851;
@@ -180,10 +181,9 @@ public class Login extends Activity {
 		
 		String user = "11";
 		String pass = "test_pass";
-		String team = "1";
+		team = "1";
 		
 		//Send login information to backend
-		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_TEAM_UPDATE,Integer.parseInt(team));
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGIN,Integer.parseInt(user),pass);	
 		//wait for the backend to respond... it will receive the response in Message.receive (case 133 or 134)
 		//and will call loginResponse method
@@ -227,6 +227,7 @@ public class Login extends Activity {
 		extras.putBoolean("COMMANDER_RANK", isCommander);
 		extras.putString("DEVICE_NAME", deviceName);
 		extras.putString("DEVICE_ADDRESS", deviceAddress);
+		extras.putString("FIREMAN_TEAM", team);
 		i.putExtras(extras);
 	}
 	
