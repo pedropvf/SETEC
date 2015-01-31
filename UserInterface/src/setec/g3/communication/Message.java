@@ -158,6 +158,8 @@ public class Message {
 		byte[] p2 = intToByteArray4(bits);
 		byte[] p3 = intToByteArray4(bits2);
 		byte b = (byte) number;
+		
+		
 		byte[] p4 = new byte[] { b };
 
 		byte[] pfinal = new byte[p.length + p2.length + p3.length + p4.length];
@@ -460,8 +462,8 @@ public class Message {
 	}
 
 	public static final byte[] intToByteArray4(int value) {
-		return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16),
-				(byte) (value >>> 8), (byte) value };
+		return new byte[] { (byte) value, (byte) (value >>> 8),
+				(byte) (value >>> 16), (byte) (value >>> 24)};
 	}
 
 	public static final int byteArrayToInt3(byte[] b) {
@@ -476,13 +478,13 @@ public class Message {
 
 	public static final int byteArrayToInt4(byte[] b) {
 		int l = 0;
-		l |= b[0] & 0xFF;
-		l <<= 8;
-		l |= b[1] & 0xFF;
+		l |= b[3] & 0xFF;
 		l <<= 8;
 		l |= b[2] & 0xFF;
 		l <<= 8;
-		l |= b[3] & 0xFF;
+		l |= b[1] & 0xFF;
+		l <<= 8;
+		l |= b[0] & 0xFF;
 		return l;
 	}
 
