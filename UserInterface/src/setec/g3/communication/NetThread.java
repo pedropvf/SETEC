@@ -56,7 +56,6 @@ public class NetThread extends Thread{
 				msgInt[msgnr] = (int) (sendingPacket.packetContent[msgnr] & 0xFF);
 			}
 				
-			
 			Log.d("NetThread", Arrays.toString(msgInt));
 			
 			output.writeObject(sendingPacket);

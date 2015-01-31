@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class rspns implements Serializable {
     public final byte id;
     
-    rspns(byte id){
+    public rspns(byte id){
         this.id = id;
     }
 }

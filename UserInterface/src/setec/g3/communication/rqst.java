@@ -14,10 +14,10 @@ public class rqst implements Serializable {
     
     public final byte[] packet;
     
-    rqst(byte id, byte spec, boolean priority, byte[] packet){
+    public rqst(byte id, byte spec, byte[] packet){
         this.id = id;
         this.spec = spec;
         this.packet = packet;
-        this.priority = priority;
+
     }
 }

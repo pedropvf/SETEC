@@ -23,7 +23,7 @@ public class SendToProtocol extends Thread{
 		spec = _spec;
 		packet = _packet;
 		priority = _priority;
-		request = new rqst(id, spec, priority, packet);
+		request = new rqst(id, spec, packet);
 		
 	}
 

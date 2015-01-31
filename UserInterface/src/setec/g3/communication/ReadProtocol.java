@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 import setec.g3.communication.CommEnumerators.Protocol;
 import setec.g3.maincontroller.Login;
@@ -12,6 +13,7 @@ import setec.g3.maincontroller.MainUI;
 
 import android.util.Log;
 import androidBackendAPI.Packet;
+import protocol_g6_package.Protocol_G6;
 
 public class ReadProtocol extends Thread {
 	
@@ -96,6 +98,14 @@ public class ReadProtocol extends Thread {
 						sendingPacket.hasProtocolHeader = true;
 						sendingPacket.packetContent = request.packet;
 						
+						int [] msgInt = new int[sendingPacket.packetContent.length];
+						
+						for(int msgnr=0; msgnr<sendingPacket.packetContent.length;msgnr++){
+							msgInt[msgnr] = (int) (sendingPacket.packetContent[msgnr] & 0xFF);
+						}
+							
+						Log.d("ReadProtocol", Arrays.toString(msgInt));
+						
 						NetThread n = new NetThread(sendingPacket, loginFlag);
 						n.start(); //a thread tem que retornar para se
 									// saber se foi bem sucedido ou não
@@ -131,6 +141,15 @@ public class ReadProtocol extends Thread {
 					Packet receivePacket = new Packet();
 					receivePacket.hasProtocolHeader = true;
 					receivePacket.packetContent = request.packet;
+					
+					int [] msgInt = new int[receivePacket.packetContent.length];
+					
+					for(int msgnr=0; msgnr<receivePacket.packetContent.length;msgnr++){
+						msgInt[msgnr] = (int) (receivePacket.packetContent[msgnr] & 0xFF);
+					}
+						
+					Log.d("ReadProtocol", Arrays.toString(msgInt));
+					
 					messageHandler.receive(receivePacket);
 					
 				} else {
@@ -175,7 +194,7 @@ public class ReadProtocol extends Thread {
 				threadG5 = new Thread(){
 			        public void run(){
 			        	Log.d("ReadProtocol","Initiating G5 protocol");
-			        	Protocol_G5 g5 = new Protocol_G5(true, port, (byte)111);
+			        	Protocol_G5 g5 = new Protocol_G5(false, port, (byte)system_id);
 			        	g5.execute();
 			        }
 			    };
@@ -185,8 +204,16 @@ public class ReadProtocol extends Thread {
 				threadG6 = new Thread(){
 			        public void run(){
 			        	Log.d("ReadProtocol","Initiating G6 protocol");
-			        	Protocol_G6 g6 = new Protocol_G6(true, port, (byte)111);
-			        	g6.execute();
+			        	Protocol_G6 g6 = new Protocol_G6(false, port, (byte)system_id);
+			        	try {
+							g6.execute();
+						} catch (ClassNotFoundException e) {
+							Log.e("ReadProtocol", e.toString());
+						} catch (IOException e) {
+							Log.e("ReadProtocol", e.toString());
+						} catch (InterruptedException e) {
+							Log.e("ReadProtocol", e.toString());
+						}
 			        }
 			    };
 			    threadG6.start();

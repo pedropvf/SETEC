@@ -97,6 +97,14 @@ public class ReadNet extends Thread{
 				Log.d("ReadNet", "Pacote recebido");
 				boolean sendToProtocol = message.hasProtocolHeader;
 				byte[] messageBytes = message.packetContent;
+				
+				int [] msgInt = new int[messageBytes.length];
+				
+				for(int msgnr=0; msgnr<messageBytes.length;msgnr++){
+					msgInt[msgnr] = (int) (messageBytes[msgnr] & 0xFF);
+				}
+					
+				Log.d("ReadNet", Arrays.toString(msgInt));
 
 				if (sendToProtocol == true) {
 					SendToProtocol s2 = new SendToProtocol((byte) 0x00,

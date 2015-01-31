@@ -65,7 +65,7 @@ public class Protocol_G5 {
 						
 						//unpack packet and deliver it to the app 
 						Log.d("Protocol_G5", "A fazer novo request");
-						rqst request1 = new rqst((byte)0x22, (byte) 0x00, false, packet_received);
+						rqst request1 = new rqst((byte)0x22, (byte) 0x00, packet_received);
 						proOut.writeObject(request1);
 						
 						Log.d("Protocol_G5", "A receber resposta da app");
@@ -93,7 +93,7 @@ public class Protocol_G5 {
 						
 						//fazer um request à app
 						Log.d("Protocol_G5", "A fazer novo request");
-						rqst request6 = new rqst((byte)0x11, (byte) 0x00, false, packet_received);
+						rqst request6 = new rqst((byte)0x11, (byte) 0x00, packet_received);
 						proOut.writeObject(request6);
 						
 						Log.d("Protocol_G5", "A receber resposta da app");
