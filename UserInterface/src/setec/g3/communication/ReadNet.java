@@ -19,6 +19,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidBackendAPI.Packet;
 
 public class ReadNet extends Thread{
 	
@@ -90,9 +91,9 @@ public class ReadNet extends Thread{
 		while (true) {
 
 			try {
-				Log.d("ReadNet", "A ler ...");
-				packet message;
-				message = (packet) input.readObject();
+				//Log.d("ReadNet", "A ler ...");
+				Packet message;
+				message = (Packet) input.readObject();
 				Log.d("ReadNet", "Pacote recebido");
 				boolean sendToProtocol = message.hasProtocolHeader;
 				byte[] messageBytes = message.packetContent;

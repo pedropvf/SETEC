@@ -1,8 +1,7 @@
-package setec.g3.communication;
-
+package androidBackendAPI;
 import java.io.Serializable;
 
-public class packet implements Serializable{
+public class Packet implements Serializable{
 	
    /**
 	 * 

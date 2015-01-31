@@ -54,8 +54,8 @@ public class Login extends Activity {
 	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
 	String team = "";
 	
-	String host = new String("172.30.73.51");
-	int port = 7851;
+	String host = new String("172.30.23.124");
+	int port = 2000;
 	
 	/* ble extras */
 	String deviceName;
@@ -98,7 +98,7 @@ public class Login extends Activity {
 	 * To initialise the components 
 	 */
 	private void initialiseComponents(){
-		userText.setText("please insert username");
+		userText.setText("");
 		portText.setText(defaultPort);
 		ipText.setText(defaultIP);
 		
@@ -179,8 +179,8 @@ public class Login extends Activity {
 		//String pass=passText.getText().toString().trim();
 		//String team = teamText.getText().toString().trim();
 		
-		String user = "11";
-		String pass = "test_pass";
+		String user = "121212";
+		String pass = "teste";
 		team = "1";
 		
 		//Send login information to backend
@@ -200,7 +200,7 @@ public class Login extends Activity {
 	        Login.this.startActivity(mainIntent);
 	        //Login.this.finish();
 		}else{
-			userText.setText("please insert username");
+			userText.setText("");
 			passText.setText("");
 			toastMessage("Credentials could not be verified.", Toast.LENGTH_SHORT, 0, 0);
 		}

@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Arrays;
 
 import setec.g3.maincontroller.Login;
 import setec.g3.maincontroller.MainUI;
 import android.util.Log;
 import android.widget.TextView;
+import androidBackendAPI.Packet;
 
 public class NetThread extends Thread{
 	
@@ -22,13 +24,13 @@ public class NetThread extends Thread{
 	boolean loginFlag = false;
 	
 	//packet object
-	packet sendingPacket;
+	Packet sendingPacket;
 	
-	NetThread(packet _sendingPacket){
+	NetThread(Packet _sendingPacket){
 		sendingPacket = _sendingPacket;
 	}
 	
-	NetThread(packet _sendingPacket, boolean loginFlag){
+	NetThread(Packet _sendingPacket, boolean loginFlag){
 		sendingPacket = _sendingPacket;
 		this.loginFlag = loginFlag;
 	}
@@ -47,6 +49,15 @@ public class NetThread extends Thread{
 				Log.d("NetThread", "OutputStream was not created, will return now");
 				return;
 			}
+			
+			int [] msgInt = new int[sendingPacket.packetContent.length];
+			
+			for(int msgnr=0; msgnr<sendingPacket.packetContent.length;msgnr++){
+				msgInt[msgnr] = (int) (sendingPacket.packetContent[msgnr] & 0xFF);
+			}
+				
+			
+			Log.d("NetThread", Arrays.toString(msgInt));
 			
 			output.writeObject(sendingPacket);
 			output.flush();

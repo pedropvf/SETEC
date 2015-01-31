@@ -2,6 +2,8 @@ package setec.g3.communication;
 
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -13,6 +15,7 @@ import setec.g3.userinterface.InterfaceStatusEnumerators.PriorityLevel;
 
 import android.content.Intent;
 import android.util.Log;
+import androidBackendAPI.Packet;
 
 public class Message {
 
@@ -71,13 +74,25 @@ public class Message {
 		Log.d("Message", "Recebido pelo send: lat= "+String.valueOf(lat)+"  long= "+String.valueOf(longi));
 		
 		byte[] p = new byte[] { (byte) messageType, firemanID };
-
+		
+		ByteBuffer bb = ByteBuffer.allocate(4);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+		bb.putFloat(lat);
+		byte[] p2 = bb.array();
+		
+		ByteBuffer bb2 = ByteBuffer.allocate(4);
+		bb2.order(ByteOrder.LITTLE_ENDIAN);
+		bb2.putFloat(longi);
+		byte[] p3 = bb2.array();
+		
+		/*
 		int bits = Float.floatToIntBits(lat);
 		int bits2 = Float.floatToIntBits(longi);
 
 		byte[] p2 = intToByteArray4(bits);
 		byte[] p3 = intToByteArray4(bits2);
-
+		*/
+		
 		byte[] pfinal = new byte[p.length + p2.length + p3.length];
 		System.arraycopy(p, 0, pfinal, 0, p.length);
 		System.arraycopy(p2, 0, pfinal, p.length, p2.length);
@@ -279,7 +294,7 @@ public class Message {
 		s.start();
 	}
 
-	public void receive(packet message) {
+	public void receive(Packet message) {
 
 		byte[] messageArray = message.packetContent;
 		byte messageType = messageArray[0];
@@ -292,7 +307,7 @@ public class Message {
 		switch (type) {
 		case 128:
 			// predefined message
-			byte preByte = messageArray[3];
+			byte preByte = messageArray[2];
 			final int pre_message = (int) (preByte & 0xFF);
 			userInterface.runOnUiThread(new Runnable() {
 				@Override
@@ -427,7 +442,6 @@ public class Message {
 				public void run() {
 					userInterface.parseObjectiveRecived(lat, longi);
 				}
-
 			});
 			break;
 		case 136:

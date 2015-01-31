@@ -11,6 +11,7 @@ import setec.g3.maincontroller.Login;
 import setec.g3.maincontroller.MainUI;
 
 import android.util.Log;
+import androidBackendAPI.Packet;
 
 public class ReadProtocol extends Thread {
 	
@@ -91,8 +92,8 @@ public class ReadProtocol extends Thread {
 					
 					if(spec==0x00){
 						//create packet object to send
-						packet sendingPacket = new packet();
-						sendingPacket.hasProtocolHeader = false;
+						Packet sendingPacket = new Packet();
+						sendingPacket.hasProtocolHeader = true;
 						sendingPacket.packetContent = request.packet;
 						
 						NetThread n = new NetThread(sendingPacket, loginFlag);
@@ -127,7 +128,7 @@ public class ReadProtocol extends Thread {
 			        proOut.writeObject(response);
 			        
 					//unpack and process
-					packet receivePacket = new packet();
+					Packet receivePacket = new Packet();
 					receivePacket.hasProtocolHeader = true;
 					receivePacket.packetContent = request.packet;
 					messageHandler.receive(receivePacket);
