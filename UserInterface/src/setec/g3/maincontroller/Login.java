@@ -41,8 +41,8 @@ public class Login extends Activity {
 	/* The parameters variables */
 	//private String ninjaUsername="g3";
 	//private String ninjaPassword="g3";
-	private String defaultIP="255.255.255.255";
-	private String defaultPort="666";
+	private String defaultIP="";
+	private String defaultPort="";
 	private boolean isConnected=false;
 	
 	/*parameter for communication*/
@@ -237,7 +237,7 @@ public class Login extends Activity {
 		if(readNet==null){
 			messageHandler = new Message();
 			messageHandler.setLoginActivity(this);
-			readNet = new ReadNet(defaultIP, Integer.parseInt(defaultPort));
+			readNet = new ReadNet(ipText.getText().toString().trim(), Integer.parseInt(portText.getText().toString().trim()));
 			readNet.setMessageObject(messageHandler);
 			readNet.setActivityObject(this, false);
 			readNet.start();
