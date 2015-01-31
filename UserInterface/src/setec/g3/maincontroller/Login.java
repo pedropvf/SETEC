@@ -39,8 +39,8 @@ public class Login extends Activity {
 	private LinearLayout connectForm, loginForm;
 	
 	/* The parameters variables */
-	private String ninjaUsername="g3";
-	private String ninjaPassword="g3";
+	//private String ninjaUsername="g3";
+	//private String ninjaPassword="g3";
 	private String defaultIP="255.255.255.255";
 	private String defaultPort="666";
 	private boolean isConnected=false;
@@ -52,10 +52,10 @@ public class Login extends Activity {
 	public static ReadProtocol readProtocol;
 	public Message messageHandler;
 	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
-	String team = "";
+	String team;
 	
-	String host = new String("172.30.23.124");
-	int port = 2000;
+	//String host = new String("172.30.23.124");
+	//int port = 2000;
 	
 	/* ble extras */
 	String deviceName;
@@ -175,13 +175,14 @@ public class Login extends Activity {
 		//TODO
 		
 		//read the text the user provided by the login
-		//String user=userText.getText().toString().trim();
-		//String pass=passText.getText().toString().trim();
-		//String team = teamText.getText().toString().trim();
+		String user=userText.getText().toString().trim();
+		String pass=passText.getText().toString().trim();
+		@SuppressWarnings("unused")
+		String team = teamText.getText().toString().trim();
 		
-		String user = "121212";
-		String pass = "teste";
-		team = "1";
+		//String user = ;
+		//String pass = "teste";
+		//team = "1";
 		
 		//Send login information to backend
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGIN,Integer.parseInt(user),pass);	
@@ -236,7 +237,7 @@ public class Login extends Activity {
 		if(readNet==null){
 			messageHandler = new Message();
 			messageHandler.setLoginActivity(this);
-			readNet = new ReadNet(host, port);
+			readNet = new ReadNet(defaultIP, Integer.parseInt(defaultPort));
 			readNet.setMessageObject(messageHandler);
 			readNet.setActivityObject(this, false);
 			readNet.start();
