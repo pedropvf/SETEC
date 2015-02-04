@@ -56,12 +56,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.renderscript.RenderScript.Priority;
 import android.telephony.PhoneStateListener;
@@ -96,7 +99,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	
 	/* for communication */
 	/* for communication */
-	public static byte firemanID;
+	public static byte firemanID = Message.firemanID;
 	public static ObjectOutputStream output;
 	private ReadNet readNet;
 	private ReadProtocol readProtocol;
@@ -220,18 +223,14 @@ public class MainUI extends Activity implements SensorEventListener{
 	TelephonyManager Tel;
 	MyPhoneStateListener MyListener;
 	
+	/*Power manager*/
+	PowerManager pMg;
+	WakeLock wakeLock; 
 	
-	public static int waiting_ok;
+	public boolean waiting_ok=false;
 	/************************************************************************************************************************************
 	 *************************************************************************************************************************************/
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	/*************************************************************************************************************************************
 	 *************************************************************************************************************************************
@@ -264,26 +263,15 @@ public class MainUI extends Activity implements SensorEventListener{
 		
 		//setUpHwBluetoothHandler();
 		
-		// for testing purposes **********************************************************
-		/*msg=new Message(this);
-		try {
-			String send=new String("teste");
-			packet pp = new packet();
-			byte[] bytesString = send.getBytes("ISO-8859-1");
-			byte[] p = new byte[]{(byte)129,firemanID};
-			byte[] pfinal = new byte[p.length + bytesString.length];
-			System.arraycopy(p, 0, pfinal, 0, p.length);
-			System.arraycopy(bytesString, 0, pfinal, p.length, bytesString.length);
-			
-			pp.hasProtocolHeader=false;
-			pp.packetContent=pfinal;
-			
-			msg.receive(pp);
-		} catch (UnsupportedEncodingException e) {
-			Log.e("Message",e.toString());
+		//set up partial wakeLock
+		pMg = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		if (pMg == null) {
+			Log.e("MainUI", "PowerManager is null");
+		}else{
+			wakeLock = pMg.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK , "MainUI");
+			wakeLock.acquire();
 		}
-		// for testing purposes ***********************************************************/
-		
+
 	}
 	/*
 	 * Inflate the menu and adds items to the action bar if it is present.
@@ -312,10 +300,10 @@ public class MainUI extends Activity implements SensorEventListener{
 		super.onPause();
 		
 		// to stop the listener and save battery
-		mSensorManager.unregisterListener(this);
-		gps.stopUsingGPS();
+		//mSensorManager.unregisterListener(this);
+		//gps.stopUsingGPS();
 		//onPauseHwBluetoothSetUp();
-		onBlePause();
+		//onBlePause();
 	}
 	@Override
 	protected void onDestroy() {
@@ -334,6 +322,8 @@ public class MainUI extends Activity implements SensorEventListener{
         bateryChecker.trun=false;
         
 		onBleDestroy();
+		
+		wakeLock.release();
 	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/
@@ -643,6 +633,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	/*
 	 * Initializes features to be used by the UI
 	 */
+	
 	private void initializeFeatures(){
 		/* text to Speech */
 		textToSpeechHandler = new TextToSpeechHandler(this);
@@ -662,6 +653,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		setCompassOperation(compassEnabled);
 		
 		/* tap detector */
+		Log.d("MainUI", "Starting tappdetector");
 		tapDetector = new TappDetector(this, this);
 	}
 	/*
@@ -732,8 +724,8 @@ public class MainUI extends Activity implements SensorEventListener{
 	public void playDeadManAlert(int deadManPhase){
 		switch (deadManPhase){
 		case 2:
-				deadManAlarms=MediaPlayer.create(this, R.raw.dead_man_alert_1);
-				deadManAlarms.start();
+			deadManAlarms=MediaPlayer.create(this, R.raw.dead_man_alert_1);
+			deadManAlarms.start();
 			break;
 		case 3:
 			deadManAlarms.stop();
@@ -1169,7 +1161,8 @@ public class MainUI extends Activity implements SensorEventListener{
 		this.playObjectiveReceived();
 		this.Olat=(double)lat;
 		this.Olong=(double)lon;
-		this.root.postMessage("Command", "New objective received. Please go to target mode.", PriorityLevel.CRITICAL, false);
+		this.root.postMessage("Comando", "Novo objetivo recebido. Ativar orientação.", PriorityLevel.CRITICAL, false);
+		toggleCompassTargetMode();
 	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/
@@ -1257,23 +1250,15 @@ public class MainUI extends Activity implements SensorEventListener{
 			}
 		}
 		//put firemanID
-		firemanID = (byte)bundle.getInt("FIREMAN_ID");
 		team = bundle.getString("FIREMAN_TEAM");
 		if(team.equals("")==false){
 			//send team info to backend
 			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_TEAM_UPDATE, Integer.parseInt(team));
 			Log.d("MainUI", "Team = " + team);
 		}
-		Log.d("MainUI", "FiremanID = " + ((int)firemanID));
 	}
-	/*
-	 * Just sets the firemanID variable
-	 */
-	public void setFiremanID (byte fID){
-		this.firemanID=fID;
-	}
-	/*
-	 * For logging out. Returns to the log in window, but remains connected to the grid. (TODO verify if this works like this)
+	
+	 /*For logging out. Returns to the log in window, but remains connected to the grid. (TODO verify if this works like this)
 	 */
 	private void logout(){
 		Context c=this.getApplicationContext();
@@ -1485,20 +1470,67 @@ public class MainUI extends Activity implements SensorEventListener{
 	public void parseIncommingPredefinedMessage(int predefinedMessageCode){
 		this.playPredefinedMessageReceived();
 		switch (predefinedMessageCode){
-			case CommEnumerators.GO_REST:
-				if(language==UILanguage.EN){
-					root.postMessage("Command", "Go rest.", PriorityLevel.IMPORTANT, false);
-				} else if (language == UILanguage.PT) {
-					root.postMessage("Comando", "Vá descansar.", PriorityLevel.IMPORTANT, false);
-				}
+			case 0:
+				root.postMessage("Command", "Afirmativo.", PriorityLevel.CRITICAL, false);
 				break;
-			case CommEnumerators.AERIAL_SUPPORT_INCOMMING:
-				if(language==UILanguage.EN){
-					root.postMessage("Command", "Aerial support incomming.", PriorityLevel.NORMAL_PLUS, false);
-				} else if (language == UILanguage.PT) {
-					root.postMessage("Comando", "Suporte aéreo a caminho.", PriorityLevel.NORMAL_PLUS, false);
-				}
-				
+			case 1:
+				root.postMessage("Command", "Aguarde.", PriorityLevel.CRITICAL, false);
+				break;
+			case 2:
+				root.postMessage("Command", "Assim farei.", PriorityLevel.CRITICAL, false);
+				break;
+			case 3:
+				root.postMessage("Command", "Correto.", PriorityLevel.CRITICAL, false);
+				break;
+			case 4:
+				root.postMessage("Command", "Errado.", PriorityLevel.CRITICAL, false);
+				break;
+			case 5:
+				root.postMessage("Command", "Informe.", PriorityLevel.CRITICAL, false);
+				break;
+			case 6:
+				root.postMessage("Command", "Negativo.", PriorityLevel.CRITICAL, false);
+				break;
+			case 7:
+				root.postMessage("Command", "A caminho.", PriorityLevel.CRITICAL, false);
+				break;
+			case 8:
+				root.postMessage("Command", "No local.", PriorityLevel.CRITICAL, false);
+				break;
+			case 9:
+				root.postMessage("Command", "No hospital.", PriorityLevel.CRITICAL, false);
+				break;
+			case 10:
+				root.postMessage("Command", "Disponível.", PriorityLevel.CRITICAL, false);
+				break;
+			case 11:
+				root.postMessage("Command", "De regresso.", PriorityLevel.CRITICAL, false);
+				break;
+			case 12:
+				root.postMessage("Command", "INOP.", PriorityLevel.CRITICAL, false);
+				break;
+			case 13:
+				root.postMessage("Command", "No quartel.", PriorityLevel.CRITICAL, false);
+				break;
+			case 14:
+				root.postMessage("Command", "Necessito de Reforços.", PriorityLevel.CRITICAL, false);
+				break;
+			case 15:
+				root.postMessage("Command", "Casa em Perigo.", PriorityLevel.CRITICAL, false);
+				break;
+			case 16:
+				root.postMessage("Command", "Preciso de Descansar.", PriorityLevel.CRITICAL, false);
+				break;
+			case 17:
+				root.postMessage("Command", "Carro em Perigo.", PriorityLevel.CRITICAL, false);
+				break;
+			case 18:
+				root.postMessage("Command", "Descanse.", PriorityLevel.CRITICAL, false);
+				break;
+			case 19:
+				root.postMessage("Command", "Fogo a Alastrar.", PriorityLevel.CRITICAL, false);
+				break;
+			default:
 				break;
 		}
 	}
@@ -1551,12 +1583,10 @@ public class MainUI extends Activity implements SensorEventListener{
 		switch(infoCode){
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_PREDEFINED_MESSAGE:
 			{	
-				waiting_ok=1;
 				break;
 			}	
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_MESSAGE:
 			{
-				waiting_ok=1;
 				break;
 			}	
 			case CommEnumerators.COMMAND_TO_FIREFIGHTER_FIRELINE_UPDATE_REQUEST:

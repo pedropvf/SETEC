@@ -130,7 +130,7 @@ public class ReadNet extends Thread{
 				}
 				
 				if (isProtocolCreated == true){
-					// send message to protocol saying that GSM is connected
+					// send message to protocol saying that GSM is disconnected
 					SendToProtocol s2 = new SendToProtocol((byte) 0x33,
 								(byte) 0x11, false, null );
 					s2.start();

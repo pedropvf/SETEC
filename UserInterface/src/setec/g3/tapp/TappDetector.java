@@ -57,6 +57,7 @@ public class TappDetector implements SensorEventListener{
 	boolean trackDeadMan2;
 	boolean trackDeadMan3;
 	int deadManPhase;
+	boolean entered_deadMan;
 	private long startDeadManTime = 0;
 	private long currentDeadManTime = 0;
 	private long deadManTimeMilis = 30000;
@@ -66,11 +67,14 @@ public class TappDetector implements SensorEventListener{
 	int delay = 30000; //milliseconds
 	int ok_reproduced=0;
 	Runnable runnable;
-
 	
 	/* to control */
 	MainUI parentClass;
 	Activity act;
+	
+	boolean goOn=true;
+	
+	boolean repeticao = false;
 	
     public TappDetector(MainUI _parent, Activity _act) {
     	parentClass=_parent;
@@ -80,7 +84,6 @@ public class TappDetector implements SensorEventListener{
         /* Sensor Management */
         senSensorManager = (SensorManager) _act.getSystemService(_act.getApplicationContext().SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        senProximity = senSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         
         /* sound management */
         /* sound management */
@@ -105,19 +108,16 @@ public class TappDetector implements SensorEventListener{
 	        trackDeadMan=false;
 	        trackDeadMan2=false;
 	        trackDeadMan3=false;
-        } else {
+	        deadManPhase = 0;
+	        entered_deadMan = false;
+	        
+	        gravity[0] = 0;
+	        gravity[1] = 0;
+	        gravity[2] = 0;
         }
-        if(senProximity != null){
-        	senSensorManager.registerListener(this, senProximity , SensorManager.SENSOR_DELAY_NORMAL);
-        } else {
-        }
-        
-        gravity[0] = 0;
-        gravity[1] = 0;
-        gravity[2] = 0;
 
     }
-
+    
     
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -167,76 +167,61 @@ public class TappDetector implements SensorEventListener{
 
 	            
 	            if ((zg > 9.5) && (xg < 2 ) && (yg < 2)){
-	           	    if(trackDeadMan==false){
-	            		deadManPhase=1;
-		            	trackDeadMan=true;
-		            	startDeadManTime=System.currentTimeMillis();
-	            	} else {
-	            		currentDeadManTime=System.currentTimeMillis();
-	            		if((currentDeadManTime-startDeadManTime)>=deadManTimeMilis){
-	            			Log.d("teste_dead" , "entrou no dead man");
-	            			if( (deadManPhase==1) && (trackDeadMan2==false) ){
-	            				trackDeadMan2=true;
-	    		            	startDeadManTime=System.currentTimeMillis();
-	    		            	deadManPhase=2;
-	            			} else if((deadManPhase==2) && (trackDeadMan3==false)){
-	            				trackDeadMan3=true;
-	    		            	startDeadManTime=System.currentTimeMillis();
-	    		            	deadManPhase=3;
-	            			}
-	            			else if((deadManPhase==3) && (trackDeadMan3==true)){
-	    		            	deadManPhase=4;
-	            			}
-	            		}
+	            	if(deadManPhase!=3){
+		           	    if(trackDeadMan==false){
+		            		deadManPhase=1;
+			            	trackDeadMan=true;
+			            	startDeadManTime=System.currentTimeMillis();
+		            	} else {
+		            		currentDeadManTime=System.currentTimeMillis();
+		            		if((currentDeadManTime-startDeadManTime)>=deadManTimeMilis){
+		            			Log.d("teste_dead" , "entrou no dead man");
+		            			if( (deadManPhase==1) && (trackDeadMan2==false) ){
+		            				trackDeadMan2=true;
+		    		            	startDeadManTime=System.currentTimeMillis();
+		    		            	deadManPhase=2;
+		    		            	entered_deadMan=false;
+		    		            	Log.d("teste_dead" , "dead man fase 2");
+		            			} else if((deadManPhase==2)){
+		    		            	startDeadManTime=System.currentTimeMillis();
+		    		            	deadManPhase=3;
+		    		            	entered_deadMan=false;
+		    		            	Log.d("teste_dead" , "dead man fase 3");
+		            			}
+		            			
+		            		}
+		            	}
 	            	}
 	            } else {
 	            	trackDeadMan=false;
 	            	trackDeadMan2=false;
-	            	trackDeadMan3=false;
 	            	deadManPhase=0;
+	            	entered_deadMan = false;
 	            }
-	            switch (deadManPhase){
+	            
+	            if(entered_deadMan==false){
+	            	switch (deadManPhase){
 	            	case 1:
-	            	break;
+	            		break;
 	            	case 2:
+	            		parentClass.speak("Por favor, se conseguir, mexa-se.");
+	            		entered_deadMan = true;
+	            		break;
+	            	case 3:
 	            		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_DEAD_MAN_ALERT);
 	            		if(!(alarm1.isPlaying())){
 	            			alarm1.start();
 	                    }
-	            		//adicionei isto porque estava a enviar várias vezes a mensagem
-	            		trackDeadMan=false;
-		            	trackDeadMan2=false;
-		            	trackDeadMan3=false;
-		            	deadManPhase=0;
-	            	break;
-	            	case 3:
-	            		if((alarm1.isPlaying())){
-	            			alarm1.pause();
-	                    }
-	            		if(!(alarm2.isPlaying())){
-	            			alarm2.start();
-	                    }
-	            	break;
-	            	case 4:
-	            		if((alarm2.isPlaying())){
-	            			alarm2.pause();
-	                    }
-	            		if(!(deadManAlarm.isPlaying())){
-	            			deadManAlarm.start();
-	                    }
-	            	break;
+	            		entered_deadMan = true;
+	            		break;
 	            	case 0:
 	            		if((alarm1.isPlaying())){
 	            			alarm1.pause();
 	                    }
-	            		if((alarm2.isPlaying())){
-	            			alarm2.pause();
-	                    }
-	            		if((deadManAlarm.isPlaying())){
-	            			deadManAlarm.pause();
-	                    }
-	            	break;
+	            		break;
+	            	}
 	            }
+	            
 	 
 	            
 	            if(((abs_acc > 3.0) && (absval.size()==0)) || (absval.size() != 0))
@@ -277,7 +262,9 @@ public class TappDetector implements SensorEventListener{
 	            	{
 	            		Log.d("coisa" , "OK message");
 	            		parentClass.speak("OK");
-	            		ok_reproduced=1;
+	            		if(parentClass.waiting_ok==true){
+	            			ok_reproduced=1;
+	            		}
 	            		ok=0;
 	            	}
 	            	
@@ -329,32 +316,43 @@ public class TappDetector implements SensorEventListener{
 	            last_y = y;
 	            last_z = z;
 	        }
-	    }else if(event.sensor.getType()==Sensor.TYPE_PROXIMITY){
-	     float prox = event.values[0];
+	   
+	    //Repetição de mensagem recebida pelo backend se bombeiro não confirma com OK tapp
+	    if((parentClass.waiting_ok==true) && (ok_reproduced==0) && (repeticao==false))
+	    {
+	    	
+	    	repeticao = true;
+	   
+	        	Log.d("Tapp", "Entrou no cenas");
+	            
+	            runnable = new Runnable(){
+		    	    public void run(){
+		    	        //send message again
+		    	        
+		    	        if(ok_reproduced==1)
+		    	        {
+		    	        	Log.d("Tapp", "Entrou no cenas OK");
+		    	        	h.removeCallbacksAndMessages(runnable);
+		    	        	ok_reproduced=0;
+		    	        	parentClass.waiting_ok=false;
+		    	        	repeticao = false;
+		    	        }
+		    	        else
+		    	        {
+		    	        	Log.d("Tapp", "Entrou no cenas Repetir");
+		    	        	//repetir mensagem
+		    	        	if(parentClass.root.combatMode){
+		    	        		parentClass.root.repeatLastMessage();
+		    	        	}
+		    	        	h.postDelayed(this, 30000); 
+		    	        }
+		    	   
+		    	};
+	         };
+			
+	    	h.postDelayed(runnable, 30000); 
 	    }
 	    
-	    if((setec.g3.maincontroller.MainUI.waiting_ok==1) && (ok_reproduced==0))
-	    {
-	        if(h == null) {
-	            h = new Handler();
-	         }
-			runnable = new Runnable(){
-	    	    public void run(){
-	    	        //send message again
-	    	        
-	    	        if(ok_reproduced==1)
-	    	        {
-	    	        	h.removeCallbacksAndMessages(runnable);
-	    	        }
-	    	        else
-	    	        {
-	    	        	//repetir mensagem
-	    	        	h.postDelayed(this, 30000); 
-	    	        }
-	    	        
-	    	    }
-	    	};
-	    	h.postDelayed(runnable, 30000); 
 	    }
 	    
 	}

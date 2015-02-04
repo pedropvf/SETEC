@@ -1,9 +1,11 @@
 package setec.g3.texttospeech;
 
 import java.util.Locale;
-
+import setec.g3.ui.R;
 import android.app.Activity;
+import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -29,7 +31,7 @@ public class TextToSpeechHandler {
 				  			// tts.setPitch(5); // set pitch level
 	
 				  			// tts.setSpeechRate(2); // set speech speed rate
-				  			speakOut("Olá. O meu nome é Siomara e serei a sua guia por hoje. Boa sorte!");
+				  			speakOut("Bem vindo!");
 				  			if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 				  				Log.e("TTS", "Language is not supported");
 				  			} 
@@ -50,15 +52,22 @@ public class TextToSpeechHandler {
 	
 	public void speakOut(String text) {
 		try{
-    		/*AudioManager audioManager = (AudioManager) act.getSystemService((act.getApplicationContext()).AUDIO_SERVICE);
+    		AudioManager audioManager = (AudioManager) act.getSystemService(Context.AUDIO_SERVICE);
             audioManager.setMode(AudioManager.MODE_IN_CALL);
             audioManager.startBluetoothSco();
-            audioManager.setBluetoothScoOn(true);*/
-			Log.e("TTS", text);
+            audioManager.setBluetoothScoOn(true);
+			Log.d("TTS", text);
+			
+		/*	MediaPlayer mediaPlayer = MediaPlayer.create(act.getApplicationContext(), R.raw.alarm);
+    		mediaPlayer.start();
+    		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+    	         public void onCompletion(MediaPlayer mp) {
+    	             mp.release();
+    	         }
+    	     });
+			*/
     		tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
             
-    		//MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.kalimba);
-    		//mediaPlayer.start(); 
     	}catch( Exception e){
     		Log.d("errors", e.toString());
     	}

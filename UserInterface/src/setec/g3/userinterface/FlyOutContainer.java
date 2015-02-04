@@ -248,6 +248,7 @@ public class FlyOutContainer extends RelativeLayout {
 	/* UI language */
 	public ImageView languageSelector;
 	public TextView languageSelectorText;
+	public String lastMessage=new String("");
 	/************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 	
@@ -1872,11 +1873,22 @@ public class FlyOutContainer extends RelativeLayout {
     	} else if (parentClass.language==UILanguage.PT){
     		sb = new StringBuilder("Última Mensagem\n").append((sentByMe==true)?("Utilizador: "):("Comando: ")).append(message);
     	}
-		
+		lastMessage=new String(message);
+		if(this.combatMode){
+			parentClass.waiting_ok=true;
+		}
+		if(combatMode && sentByMe==false){
+			parentClass.speak("Nova mensagem do comando..."+message);
+		}
 		quickScreenMainText.setText(sb.toString());
 		//quickScreenMainText.
 		messageItemValues.add(new MessageItem(sender, message, priority, sentByMe));
 		messageList.setSelection(messageAdapter.getCount() - 1);
+	}
+	public void repeatLastMessage(){
+		if(this.combatMode){
+			parentClass.speak("Repetição de mensagem: " + lastMessage);
+		}
 	}
 	/*
 	 * displays the last message sent / received on the quick screen
@@ -2164,25 +2176,26 @@ public class FlyOutContainer extends RelativeLayout {
 	 * To create the predefined messages stated in the System Design
 	 */
 	private void createPredefinedMessagesList(){
-		if(parentClass.language==UILanguage.EN){
-			addPredefinedSystemDesignMessage("Need support", "Notify Backend about the need for operational support.", 0);
-			addPredefinedSystemDesignMessage("Need to back down", "Notify Backend about the need for retreat.", 1);
-			addPredefinedSystemDesignMessage("Firetruck is in trouble", "Notify Backend that the firetruck is compromised.", 2);
-			addPredefinedSystemDesignMessage("Need aerial support", "Notify Backend about the need for operational aerial support.", 3);
-			addPredefinedSystemDesignMessage("Fire spreading", "Notify Backend about the undergoing firespread.", 6);
-			addPredefinedSystemDesignMessage("We are leaving", "Notify Backend about the intention to leave the area of operation.", 7);
-			addPredefinedSystemDesignMessage("Fire getting close to house", "Notify Backend about the close proximity of the fire to a building.", 8);
-			addPredefinedSystemDesignMessage("House burned", "Notify Backend about a scorched building.", 9);
-    	} else if (parentClass.language==UILanguage.PT){
-    		addPredefinedSystemDesignMessage("Preciso de apoio", "Avisar o commando da necessidade de apoio.", 0);
-    		addPredefinedSystemDesignMessage("Preciso de me retirar", "Avisar o comando da necessidade de retirada.", 1);
-    		addPredefinedSystemDesignMessage("Veículo em perigo", "Avisar o comando acerca do veículo exposto a perigo.", 2);
-    		addPredefinedSystemDesignMessage("Preciso de apoio aéreo", "Avisar o comando da necessidade de apoio aéreo.", 3);
-    		addPredefinedSystemDesignMessage("Fogo a espalhar-se", "Avisar o comando da dispersão do fogo.", 6);
-    		addPredefinedSystemDesignMessage("Equipa em retirada", "Avisar o comando da retirada da equipa.", 7);
-    		addPredefinedSystemDesignMessage("Fogo a aproximar-se de casa", "Avisar o comando da proximidade do fogo a casa.", 8);
-    		addPredefinedSystemDesignMessage("Casa queimada", "Avisar o comando de casa quiemada.", 9);
-    	}
+		addPredefinedSystemDesignMessage("Afirmativo.", "Notificar Backend.", 0);
+		addPredefinedSystemDesignMessage("Aguarde.", "Pedir para aguardar.", 1);
+		addPredefinedSystemDesignMessage("Assim farei.", "Aceitar instrução.", 2);
+		addPredefinedSystemDesignMessage("Correto.", "Notificar Backend.", 3);
+		addPredefinedSystemDesignMessage("Errado.", "Notificar Backend.", 4);
+		addPredefinedSystemDesignMessage("Informe.", "Pedir informação.", 5);
+		addPredefinedSystemDesignMessage("Negativo.", "Notificar Backend.", 6);
+		addPredefinedSystemDesignMessage("A caminho.", "Notificar Backend.", 7);
+		addPredefinedSystemDesignMessage("No local.", "Notificar Backend.", 8);
+		addPredefinedSystemDesignMessage("No hospital.", "Notificar Backend.", 9);
+		addPredefinedSystemDesignMessage("Disponível.", "Notificar Backend.", 10);
+		addPredefinedSystemDesignMessage("De regresso.", "Notificar Backend.", 11);
+		addPredefinedSystemDesignMessage("INOP.", "Notificar Backend.", 12);
+		addPredefinedSystemDesignMessage("No quartel.", "Notificar Backend.", 13);
+		addPredefinedSystemDesignMessage("Necessito de Reforços.", "Pedir reforços.", 14);
+		addPredefinedSystemDesignMessage("Casa em Perigo.", "Notificar Backend.", 15);
+		addPredefinedSystemDesignMessage("Preciso de Descansar.", "Notificar Backend.", 16);
+		addPredefinedSystemDesignMessage("Carro em Perigo.", "Notificar Backend.", 17);
+		addPredefinedSystemDesignMessage("Descanse.", "Notificar Backend.", 18);
+		addPredefinedSystemDesignMessage("Fogo a Alastrar.", "Notificar Backend.", 19);
 		
 	}
 	/************************************************************************************************************************************

@@ -379,15 +379,23 @@ public class Message {
 			// firefighter ID
 			byte iDByte = messageArray[1];
 			//final int iD = (int) (iDByte & 0xFF);
-			firemanID = iDByte;
-			
-			login_act.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					login_act.connectToBackend(true, firemanID);
-				}
-			});
+			if(firemanID==(byte)0){
+				firemanID = iDByte;
+				
+				login_act.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						login_act.connectToBackend(true, firemanID);
+					}
+				});
+				
+			}else{
+				//se o bombeiro já tinha um id e recebeu outro, 
+				//enviar mensagem a rejeitar o id novo
+				send((byte)22, (int)(iDByte & 0xFF));
+			}
+		
 			
 			break;
 		case 133:
@@ -447,7 +455,19 @@ public class Message {
 			});
 			break;
 		case 136:
-			//activate automatic alert
+			userInterface.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					userInterface.root.postMessage("Command",
+							"Backend confirmou recepção de alerta", PriorityLevel.NORMAL, false);
+					userInterface.playMessageReceived();
+				}
+
+			});
+			break;
+		case 137:
+			//logout response
 			break;
 		default:
 			Log.e("ReadNet", "Wrong type of message.");

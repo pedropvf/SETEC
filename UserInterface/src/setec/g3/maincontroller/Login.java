@@ -36,13 +36,16 @@ public class Login extends Activity {
 	private EditText portText;
 	private EditText teamText;
 	private EditText ipText;
-	private LinearLayout connectForm, loginForm;
+	private LinearLayout connectForm, loginForm, teamForm;
 	
 	/* The parameters variables */
 	//private String ninjaUsername="g3";
 	//private String ninjaPassword="g3";
-	private String defaultIP="";
-	private String defaultPort="";
+	private String defaultIP = "192.168.1.101";
+	private String defaultPort = "4444";
+	private String defaultUser = "12121212";
+	private String defaultPass = "teste";
+	private String defaultTeam = "1";
 	private boolean isConnected=false;
 	
 	/*parameter for communication*/
@@ -52,7 +55,7 @@ public class Login extends Activity {
 	public static ReadProtocol readProtocol;
 	public Message messageHandler;
 	public static CommEnumerators.Protocol protocolToUse = Protocol.PROTOCOL_G5;
-	String team;
+	public String team;
 	
 	//String host = new String("172.30.23.124");
 	//int port = 2000;
@@ -92,18 +95,22 @@ public class Login extends Activity {
 		ipText = (EditText) findViewById(R.id.login_ip);
 		connectForm = (LinearLayout) findViewById(R.id.login_port_ip_form_layout);
 		loginForm = (LinearLayout) findViewById(R.id.login_form_layout);
+		teamForm = (LinearLayout) findViewById(R.id.login_team);
 	}
 	
 	/*
 	 * To initialise the components 
 	 */
 	private void initialiseComponents(){
-		userText.setText("");
+		userText.setText(defaultUser);
+		passText.setText(defaultPass);
 		portText.setText(defaultPort);
 		ipText.setText(defaultIP);
+		teamText.setText(defaultTeam);
 		
 		loginBtn.setText("Connect");
 		loginForm.setVisibility(View.INVISIBLE);
+		teamForm.setVisibility(View.INVISIBLE);
 		toastMessage("Press \"Connect\" to try a Backend connection.", Toast.LENGTH_LONG, 0, 0);
 	}
     
@@ -133,14 +140,14 @@ public class Login extends Activity {
 		    	}
 		    }
 		});
-		userText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+	/*	userText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(hasFocus){
 					userText.setText("");
 				}
 			}
-		});
+		});*/
 	}
 	
 	/*
@@ -151,6 +158,7 @@ public class Login extends Activity {
 			firemanID = _firemanID;
 			loginBtn.setText("Login");
 			loginForm.setVisibility(View.VISIBLE);
+			teamForm.setVisibility(View.VISIBLE);
 			connectForm.setVisibility(View.INVISIBLE);
 			rankRadioGrp.setVisibility(View.INVISIBLE);
 			toastMessage("Connected.", Toast.LENGTH_SHORT, 0, 0);
@@ -177,17 +185,20 @@ public class Login extends Activity {
 		//read the text the user provided by the login
 		String user=userText.getText().toString().trim();
 		String pass=passText.getText().toString().trim();
-		@SuppressWarnings("unused")
-		String team = teamText.getText().toString().trim();
 		
 		//String user = ;
 		//String pass = "teste";
 		//team = "1";
 		
-		//Send login information to backend
-		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGIN,Integer.parseInt(user),pass);	
-		//wait for the backend to respond... it will receive the response in Message.receive (case 133 or 134)
-		//and will call loginResponse method
+		if(!user.equals("") && !pass.equals("")){
+			//Send login information to backend
+			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGIN,Integer.parseInt(user),pass);	
+			//wait for the backend to respond... it will receive the response in Message.receive (case 133 or 134)
+			//and will call loginResponse method
+		}else{
+			toastMessage("Please fill in the username and password", Toast.LENGTH_SHORT, 0, 0);
+		}
+		
     }
 	
 	//funcao que trata da resposta do backend (chamado pelas outras threads)
@@ -201,8 +212,8 @@ public class Login extends Activity {
 	        Login.this.startActivity(mainIntent);
 	        //Login.this.finish();
 		}else{
-			userText.setText("");
-			passText.setText("");
+		//	userText.setText("");
+		//	passText.setText("");
 			toastMessage("Credentials could not be verified.", Toast.LENGTH_SHORT, 0, 0);
 		}
 	}
@@ -228,6 +239,7 @@ public class Login extends Activity {
 		extras.putBoolean("COMMANDER_RANK", isCommander);
 		extras.putString("DEVICE_NAME", deviceName);
 		extras.putString("DEVICE_ADDRESS", deviceAddress);
+		team = teamText.getText().toString().trim();
 		extras.putString("FIREMAN_TEAM", team);
 		i.putExtras(extras);
 	}
@@ -237,6 +249,7 @@ public class Login extends Activity {
 		if(readNet==null){
 			messageHandler = new Message();
 			messageHandler.setLoginActivity(this);
+			Message.firemanID = (byte)0;
 			readNet = new ReadNet(ipText.getText().toString().trim(), Integer.parseInt(portText.getText().toString().trim()));
 			readNet.setMessageObject(messageHandler);
 			readNet.setActivityObject(this, false);
