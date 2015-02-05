@@ -45,7 +45,6 @@ public class TappDetector implements SensorEventListener{
 	int flagTap = 0, flag_descida=0, flag_subida=0, tap1=0, sor=0, ok=0;
 	float va=0, tempo=0;
 	ArrayList<Float> absval = new ArrayList<Float>();
-	//ArrayList<Float> valz = new ArrayList<Float>();
 	long lastimpulse = 0;
 	private float vibrateThreshold = 0;
 	private long lastUpdate = 0;
@@ -130,7 +129,6 @@ public class TappDetector implements SensorEventListener{
 
 	        final float alpha = (float) 0.8;
 
-	       // Log.d("tapp" , String.valueOf(gravity[0]));
 	        
 	        gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
 	        gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
@@ -144,12 +142,6 @@ public class TappDetector implements SensorEventListener{
 	        float yg = event.values[1];
 	        float zg = event.values[2];	        
 	        
-	    	
-	    	/*old code
-	    	float x = (float) (event.values[0]);
-	    	float y = (float) (event.values[1]);
-	    	float z = (float) (event.values[2]);
-	        */
 	        
 	          
 	        long curTime = System.currentTimeMillis();
@@ -162,7 +154,6 @@ public class TappDetector implements SensorEventListener{
 	            float deltaY = y-last_y;
 	            float deltaZ = z-last_z;
 	            float abs_acc = (float) Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
-	            //Log.d("teste" , "y = " + String.valueOf(deltaY));
 	            float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
 
 	            
@@ -224,7 +215,7 @@ public class TappDetector implements SensorEventListener{
 	            
 	 
 	            
-	            if(((abs_acc > 3.0) && (absval.size()==0)) || (absval.size() != 0))
+	            if(((abs_acc > 1.5) && (absval.size()==0)) || (absval.size() != 0))
 	            {
 	            	//Log.d("tapi", String.valueOf(abs_acc));
 	            	//if(z >Math.abs(0.5))
@@ -336,6 +327,7 @@ public class TappDetector implements SensorEventListener{
 		    	        	ok_reproduced=0;
 		    	        	parentClass.waiting_ok=false;
 		    	        	repeticao = false;
+		    	        	setec.g3.userinterface.FlyOutContainer.lastMessage.removeAll(setec.g3.userinterface.FlyOutContainer.lastMessage);
 		    	        }
 		    	        else
 		    	        {

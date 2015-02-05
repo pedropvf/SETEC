@@ -20,6 +20,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -248,7 +249,7 @@ public class FlyOutContainer extends RelativeLayout {
 	/* UI language */
 	public ImageView languageSelector;
 	public TextView languageSelectorText;
-	public String lastMessage=new String("");
+	public static ArrayList<String> lastMessage = new ArrayList<String>();
 	/************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 	
@@ -897,7 +898,7 @@ public class FlyOutContainer extends RelativeLayout {
 				    	if(parentClass.language==UILanguage.EN){
 				    		toastMessage("Priority: Critical",Toast.LENGTH_SHORT, 0, 0);
 				    	} else if (parentClass.language==UILanguage.PT){
-				    		toastMessage("Prioridade: Crítica",Toast.LENGTH_SHORT, 0, 0);
+				    		toastMessage("Prioridade: Cr√≠tica",Toast.LENGTH_SHORT, 0, 0);
 				    	}
 		    			break;
 					case CRITICAL:
@@ -1234,9 +1235,9 @@ public class FlyOutContainer extends RelativeLayout {
 	    			languageSelectorText.setText("Language selected: EN");
 	    		} else if(parentClass.language==UILanguage.EN){
 	    			parentClass.language=UILanguage.PT;
-	    			toastMessage("Língua selecionada: PT",Toast.LENGTH_SHORT, 0, 0);
+	    			toastMessage("L√≠ngua selecionada: PT",Toast.LENGTH_SHORT, 0, 0);
 	    			languageSelector.setImageResource(R.drawable.language_pt);
-	    			languageSelectorText.setText("Língua selecionada: PT");
+	    			languageSelectorText.setText("L√≠ngua selecionada: PT");
 	    		}
 	    		invalidate();
 		    }
@@ -1871,9 +1872,9 @@ public class FlyOutContainer extends RelativeLayout {
 		if(parentClass.language==UILanguage.EN){
 			sb = new StringBuilder("Last Message\n").append((sentByMe==true)?("You: "):("Command: ")).append(message);
     	} else if (parentClass.language==UILanguage.PT){
-    		sb = new StringBuilder("Última Mensagem\n").append((sentByMe==true)?("Utilizador: "):("Comando: ")).append(message);
+    		sb = new StringBuilder("√öltima Mensagem\n").append((sentByMe==true)?("Utilizador: "):("Comando: ")).append(message);
     	}
-		lastMessage=new String(message);
+		lastMessage.add(message);
 		if(this.combatMode){
 			parentClass.waiting_ok=true;
 		}
@@ -1887,7 +1888,20 @@ public class FlyOutContainer extends RelativeLayout {
 	}
 	public void repeatLastMessage(){
 		if(this.combatMode){
-			parentClass.speak("Repetição de mensagem: " + lastMessage);
+			Log.d("last", String.valueOf(lastMessage.size()));
+			if(lastMessage.get(0) == "Sem mensagens novas.")
+				lastMessage.remove(0);
+			Log.d("last", String.valueOf(lastMessage.size()));
+			if( lastMessage.size() == 2 )
+			{	
+				parentClass.speak("RepetiÁ„o de mensagem: " + lastMessage.get(0) + "RepetiÁ„o de mensagem: " + lastMessage.get(1) );
+			}
+			
+			else if( lastMessage.size() == 1)
+				parentClass.speak("RepetiÁ„o de mensagem: " + lastMessage.get(0));
+			
+			else if( lastMessage.size() >=3)
+				parentClass.speak("RepetiÁ„o de mensagem: " + lastMessage.get(lastMessage.size()-1) + "RepetiÁ„o de mensagem: " + lastMessage.get(lastMessage.size()-2)+ "RepetiÁ„o de mensagem: " + lastMessage.get(lastMessage.size()-3) );
 		}
 	}
 	/*
@@ -2163,8 +2177,8 @@ public class FlyOutContainer extends RelativeLayout {
 			prefix1=new String("Code: ");
 			prefix2=new String("Description: ");
     	} else if (parentClass.language==UILanguage.PT){
-    		prefix1=new String("Código: ");
-			prefix2=new String("Descrição: ");
+    		prefix1=new String("C√≥digo: ");
+			prefix2=new String("Descri√ß√£o: ");
     	}
 		StringBuilder sb=new StringBuilder(prefix1).append(code);
 		preDefinedMessageGroup pdm = new preDefinedMessageGroup(new preDefinedMessageItem(_pdm, sb.toString()));
@@ -2178,19 +2192,19 @@ public class FlyOutContainer extends RelativeLayout {
 	private void createPredefinedMessagesList(){
 		addPredefinedSystemDesignMessage("Afirmativo.", "Notificar Backend.", 0);
 		addPredefinedSystemDesignMessage("Aguarde.", "Pedir para aguardar.", 1);
-		addPredefinedSystemDesignMessage("Assim farei.", "Aceitar instrução.", 2);
+		addPredefinedSystemDesignMessage("Assim farei.", "Aceitar instru√ß√£o.", 2);
 		addPredefinedSystemDesignMessage("Correto.", "Notificar Backend.", 3);
 		addPredefinedSystemDesignMessage("Errado.", "Notificar Backend.", 4);
-		addPredefinedSystemDesignMessage("Informe.", "Pedir informação.", 5);
+		addPredefinedSystemDesignMessage("Informe.", "Pedir informa√ß√£o.", 5);
 		addPredefinedSystemDesignMessage("Negativo.", "Notificar Backend.", 6);
 		addPredefinedSystemDesignMessage("A caminho.", "Notificar Backend.", 7);
 		addPredefinedSystemDesignMessage("No local.", "Notificar Backend.", 8);
 		addPredefinedSystemDesignMessage("No hospital.", "Notificar Backend.", 9);
-		addPredefinedSystemDesignMessage("Disponível.", "Notificar Backend.", 10);
+		addPredefinedSystemDesignMessage("Dispon√≠vel.", "Notificar Backend.", 10);
 		addPredefinedSystemDesignMessage("De regresso.", "Notificar Backend.", 11);
 		addPredefinedSystemDesignMessage("INOP.", "Notificar Backend.", 12);
 		addPredefinedSystemDesignMessage("No quartel.", "Notificar Backend.", 13);
-		addPredefinedSystemDesignMessage("Necessito de Reforços.", "Pedir reforços.", 14);
+		addPredefinedSystemDesignMessage("Necessito de Refor√ßos.", "Pedir refor√ßos.", 14);
 		addPredefinedSystemDesignMessage("Casa em Perigo.", "Notificar Backend.", 15);
 		addPredefinedSystemDesignMessage("Preciso de Descansar.", "Notificar Backend.", 16);
 		addPredefinedSystemDesignMessage("Carro em Perigo.", "Notificar Backend.", 17);
@@ -2460,8 +2474,8 @@ public class FlyOutContainer extends RelativeLayout {
 				toastMessage("Compass: enabled", Toast.LENGTH_SHORT, 0, 0);
 				compassEnablerTxt.setText("Compass: Enabled");
 			} else {
-				toastMessage("Bússola: ativa", Toast.LENGTH_SHORT, 0, 0);
-				compassEnablerTxt.setText("Bússola: ativa");
+				toastMessage("B√∫ssola: ativa", Toast.LENGTH_SHORT, 0, 0);
+				compassEnablerTxt.setText("B√∫ssola: ativa");
 			}
 		} else {
 			compassEnablerBtn.setImageResource(R.drawable.compass_enabler_off);
@@ -2469,8 +2483,8 @@ public class FlyOutContainer extends RelativeLayout {
 				toastMessage("Compass: disabled", Toast.LENGTH_SHORT, 0, 0);
 				compassEnablerTxt.setText("Compass: Disabled");
 			} else {
-				toastMessage("Bússola: desativada", Toast.LENGTH_SHORT, 0, 0);
-				compassEnablerTxt.setText("Bússola: desativada");
+				toastMessage("B√∫ssola: desativada", Toast.LENGTH_SHORT, 0, 0);
+				compassEnablerTxt.setText("B√∫ssola: desativada");
 			}
 		}
 			
@@ -2483,7 +2497,7 @@ public class FlyOutContainer extends RelativeLayout {
 		if(parentClass.language==UILanguage.EN){
 			sb = new StringBuilder("Distance to Objective:\n").append(Double.toString(distance));
     	} else if (parentClass.language==UILanguage.PT){
-    		sb = new StringBuilder("Distância ao objetivo:\n").append(Double.toString(distance));
+    		sb = new StringBuilder("Dist√¢ncia ao objetivo:\n").append(Double.toString(distance));
     	}
 		quickScreenMainText.setText(sb.toString());
 	}
@@ -2613,7 +2627,7 @@ public class FlyOutContainer extends RelativeLayout {
 					if(parentClass.language==UILanguage.EN){
 						actionDialPostText("Change Settings", PriorityLevel.NORMAL);
 			    	} else if (parentClass.language==UILanguage.PT){
-						actionDialPostText("Definições", PriorityLevel.NORMAL);
+						actionDialPostText("Defini√ß√µes", PriorityLevel.NORMAL);
 			    	}
 					setCompassAngle(180.0f);
 					actionDial.setImageResource(R.drawable.dial_selected);
@@ -2625,7 +2639,7 @@ public class FlyOutContainer extends RelativeLayout {
 					if(parentClass.language==UILanguage.EN){
 						actionDialPostText("Pre Defined Messages", PriorityLevel.NORMAL);
 			    	} else if (parentClass.language==UILanguage.PT){
-						actionDialPostText("Mensagens Pré Definidas", PriorityLevel.NORMAL);
+						actionDialPostText("Mensagens Pr√© Definidas", PriorityLevel.NORMAL);
 			    	}
 					setCompassAngle(270.0f);
 					actionDial.setImageResource(R.drawable.dial_selected);
