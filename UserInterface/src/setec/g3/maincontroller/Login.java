@@ -41,7 +41,7 @@ public class Login extends Activity {
 	/* The parameters variables */
 	//private String ninjaUsername="g3";
 	//private String ninjaPassword="g3";
-	private String defaultIP = "192.168.1.101";
+	private String defaultIP = "192.168.42.222";
 	private String defaultPort = "4444";
 	private String defaultUser = "12121212";
 	private String defaultPass = "teste";
@@ -210,7 +210,7 @@ public class Login extends Activity {
 			Intent mainIntent = new Intent(Login.this,MainUI.class);
 			saveRankAndBLE(mainIntent, isCommander);
 	        Login.this.startActivity(mainIntent);
-	        //Login.this.finish();
+	        Login.this.finish();
 		}else{
 		//	userText.setText("");
 		//	passText.setText("");

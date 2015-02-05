@@ -122,6 +122,7 @@ public class DeviceScanActivity extends ListActivity {
                     mScanning = false;
                 }
                 startActivity(intent);
+                DeviceScanActivity.this.finish();
                 break;
         }
         return true;
