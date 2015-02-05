@@ -1263,15 +1263,8 @@ public class MainUI extends Activity implements SensorEventListener{
 	private void logout(){
 		Context c=this.getApplicationContext();
 		try {
-            //check if the context is given
-            if (c != null) {
-                //fetch the packagemanager so we can get the default launch activity 
-                // (you can replace this intent with any other activity if you want
-                PackageManager pm = c.getPackageManager();
-                //check if we got the PackageManager
-                if (pm != null) {
                     //create the intent with the default start activity for your application
-                    Intent mStartActivity = new Intent(MainUI.this,Login.class);
+                    Intent mStartActivity = new Intent(MainUI.this.getApplicationContext(),Splash.class);
                     mStartActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					//create a pending intent so the application is restarted after System.exit(0) was called. 
 					// We use an AlarmManager to call this intent in 100ms
@@ -1281,12 +1274,6 @@ public class MainUI extends Activity implements SensorEventListener{
 					mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
 					//kill the application
 					System.exit(0);
-                } else {
-                    Log.e("LOGOUT", "Was not able to restart application, PM null");
-                }
-            } else {
-                Log.e("LOGOUT", "Was not able to restart application, Context null");
-            }
         } catch (Exception ex) {
             Log.e("LOGOUT", "Was not able to restart application");
         }
