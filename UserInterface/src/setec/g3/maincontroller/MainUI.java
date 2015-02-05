@@ -76,6 +76,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -228,6 +229,10 @@ public class MainUI extends Activity implements SensorEventListener{
 	WakeLock wakeLock; 
 	
 	public boolean waiting_ok=false;
+	
+	/* To send the team */
+	public Button btn_send_team;
+	public EditText txt_send_team;
 	/************************************************************************************************************************************
 	 *************************************************************************************************************************************/
 
@@ -348,6 +353,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		
 		resetUI();
 	}
+	
 	/* 
 	 * Used to fetch the components from XML 
 	 */	 
@@ -371,7 +377,8 @@ public class MainUI extends Activity implements SensorEventListener{
 	    protocolToggler = (ImageView) findViewById(R.id.protocol_selector_btn);
 	    protocolTogglerText = (TextView ) findViewById(R.id.protocol_selector_text);
 	    
-	    
+	    btn_send_team = (Button) findViewById(R.id.send_team_btn);
+	    txt_send_team = (EditText) findViewById(R.id.send_team_txt);
 	}
 	 /* 
 	  * To set the components listeners. 
@@ -569,6 +576,14 @@ public class MainUI extends Activity implements SensorEventListener{
 		       					break;
 		       			}
 		       			return true;
+	       			}
+	       		}
+	       );
+	    btn_send_team.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+	       				root.vibrate(200);		       					
+		       			Message.send(15, Integer.parseInt(txt_send_team.getText().toString()));
 	       			}
 	       		}
 	       );
@@ -1282,7 +1297,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	 * For app termination
 	 */
 	private void exit(){
-		MainUI.this.finish();
+		//MainUI.this.finish();
 		System.exit(0);
 	}
 	/*************************************************************************************************************************************
@@ -1347,6 +1362,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setTitle("Logout");
+		Log.d("logout", "Building Logout dialog");
 		
 		if(language==UILanguage.EN){
 			builder.setMessage("Are you sure you wnat to logout?");
@@ -1365,7 +1381,7 @@ public class MainUI extends Activity implements SensorEventListener{
 			        dialog.dismiss();
 			    }
 			});
-		} else if (language==UILanguage.EN){
+		} else if (language==UILanguage.PT){
 			builder.setMessage("Tem a certeza que quer sair?");
 			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
 
@@ -1417,7 +1433,7 @@ public class MainUI extends Activity implements SensorEventListener{
 			        dialog.dismiss();
 			    }
 			});
-		} else if (language==UILanguage.EN){
+		} else if (language==UILanguage.PT){
 			builder.setTitle("Sair");
 			builder.setMessage("Tem a certeza que quer sair?");
 
