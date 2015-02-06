@@ -91,7 +91,7 @@ public class ReadNet extends Thread{
 		while (true) {
 
 			try {
-				//Log.d("ReadNet", "A ler ...");
+				Log.d("ReadNet", "A ler ...");
 				Packet message;
 				message = (Packet) input.readObject();
 				Log.d("ReadNet", "Pacote recebido");

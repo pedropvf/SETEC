@@ -41,7 +41,7 @@ public class Login extends Activity {
 	/* The parameters variables */
 	//private String ninjaUsername="g3";
 	//private String ninjaPassword="g3";
-	private String defaultIP = "192.168.42.222";
+	private String defaultIP = "192.168.1.101";
 	private String defaultPort = "4444";
 	private String defaultUser = "12121212";
 	private String defaultPass = "teste";
@@ -262,12 +262,12 @@ public class Login extends Activity {
     public void onDestroy()
     {
         super.onDestroy();
-        if(readNet!=null){
+     /*   if(readNet!=null){
         	readNet.kill_thread();
         }
         if(readProtocol!=null){
         	readProtocol.kill_thread();
         }
-        
+        */
     }
 }

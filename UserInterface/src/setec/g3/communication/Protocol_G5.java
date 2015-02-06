@@ -45,7 +45,7 @@ public class Protocol_G5 {
 			while(true){
 				try {
 					//ler request da aplicação (action 6)
-					Log.d("Protocol_G5", "A ler...");
+					//Log.d("Protocol_G5", "A ler...");
 					rqst request = (rqst)appIn.readObject();
 					
 					Log.d("Protocol_G5", "Pacote recebido");
@@ -110,7 +110,7 @@ public class Protocol_G5 {
 				} catch (ClassNotFoundException e) {
 					Log.d("Protocol_G5", e.toString());
 				} catch (IOException e) {
-					Log.d("Protocol_G5", e.toString());
+					//Log.d("Protocol_G5", e.toString());
 				}
 			
 			}
