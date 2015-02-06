@@ -1872,7 +1872,7 @@ public class FlyOutContainer extends RelativeLayout {
 		if(parentClass.language==UILanguage.EN){
 			sb = new StringBuilder("Last Message\n").append((sentByMe==true)?("You: "):("Command: ")).append(message);
     	} else if (parentClass.language==UILanguage.PT){
-    		sb = new StringBuilder("√öltima Mensagem\n").append((sentByMe==true)?("Utilizador: "):("Comando: ")).append(message);
+    		sb = new StringBuilder("Última Mensagem\n").append((sentByMe==true)?("Utilizador: "):("Comando: ")).append(message);
     	}
 		lastMessage.add(message);
 		if(this.combatMode){
@@ -2474,8 +2474,8 @@ public class FlyOutContainer extends RelativeLayout {
 				toastMessage("Compass: enabled", Toast.LENGTH_SHORT, 0, 0);
 				compassEnablerTxt.setText("Compass: Enabled");
 			} else {
-				toastMessage("B√∫ssola: ativa", Toast.LENGTH_SHORT, 0, 0);
-				compassEnablerTxt.setText("B√∫ssola: ativa");
+				toastMessage("Bússola: ativa", Toast.LENGTH_SHORT, 0, 0);
+				compassEnablerTxt.setText("Bússola: ativa");
 			}
 		} else {
 			compassEnablerBtn.setImageResource(R.drawable.compass_enabler_off);
@@ -2483,8 +2483,8 @@ public class FlyOutContainer extends RelativeLayout {
 				toastMessage("Compass: disabled", Toast.LENGTH_SHORT, 0, 0);
 				compassEnablerTxt.setText("Compass: Disabled");
 			} else {
-				toastMessage("B√∫ssola: desativada", Toast.LENGTH_SHORT, 0, 0);
-				compassEnablerTxt.setText("B√∫ssola: desativada");
+				toastMessage("Bússola: desativada", Toast.LENGTH_SHORT, 0, 0);
+				compassEnablerTxt.setText("Bússola: desativada");
 			}
 		}
 			

@@ -343,6 +343,7 @@ public class Message {
 			}
 			break;
 		case 130:
+			//request line of fire actualization
 			userInterface.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
@@ -468,6 +469,8 @@ public class Message {
 			break;
 		case 137:
 			//logout response
+			Log.d("MainUI", "Entrou no receber logout response");
+			userInterface.logout();
 			break;
 		default:
 			Log.e("ReadNet", "Wrong type of message.");

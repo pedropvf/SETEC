@@ -1275,7 +1275,8 @@ public class MainUI extends Activity implements SensorEventListener{
 	
 	 /*For logging out. Returns to the log in window, but remains connected to the grid. (TODO verify if this works like this)
 	 */
-	private void logout(){
+	public void logout(){
+		Log.d("MainUI", "Entrou no logout");
 		Context c=this.getApplicationContext();
 		try {
                     //create the intent with the default start activity for your application
@@ -1369,7 +1370,10 @@ public class MainUI extends Activity implements SensorEventListener{
 			builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
 
 			    public void onClick(DialogInterface dialog, int which) {
-			        logout();
+			        //logout();
+			    	Log.d("MainUI", "Entrou no enviar logout");
+			        root.toastMessage("Waiting for backend permission to logout...", Toast.LENGTH_SHORT, 0, 0);
+			        Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGOUT);
 			        dialog.dismiss();
 			    }
 
@@ -1386,7 +1390,10 @@ public class MainUI extends Activity implements SensorEventListener{
 			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
 
 			    public void onClick(DialogInterface dialog, int which) {
-			        logout();
+			    	 //logout();
+			    	Log.d("MainUI", "Entrou no enviar logout");
+			        root.toastMessage("A espera de permissão do backend...", Toast.LENGTH_SHORT, 0, 0);
+			        Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGOUT);
 			        dialog.dismiss();
 			    }
 
