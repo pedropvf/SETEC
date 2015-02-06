@@ -201,12 +201,14 @@ public class MainUI extends Activity implements SensorEventListener{
 	// Various UI stuff
 	private String mDeviceAddress;
 	private String mDeviceName;
+	
 	//bleHandler para correr aquilo passando x tempo
 	private final long interval = 2000;
 	
 	/* HeartRate shit */
 	//Variavel onde fica guardado o ritmo cardiaco
 	private int heart=0;
+	private int heartPassado=0;
 	private Handler heartRateHandler=new Handler();
 	private HeartRateRunnable heartRateDisplayRunnable = new HeartRateRunnable();
 	private long heartRateDelta=1000;
@@ -2192,7 +2194,15 @@ public class MainUI extends Activity implements SensorEventListener{
 	protected class HeartRateSenderRunnable implements Runnable {
 		@Override
 		public void run() {
-			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE, heart);
+			if((heartPassado==heart) || (heart==0) ){
+				Log.d("BLE", "Igual ou e zero");
+			}
+			else
+			{
+				Log.d("BLE", "Enviou");
+				Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE, heart);
+				heartPassado=heart;
+			}
 			heartRateSenderHandler.postDelayed(this, heartRateSendDelta);
 		}
 	}
