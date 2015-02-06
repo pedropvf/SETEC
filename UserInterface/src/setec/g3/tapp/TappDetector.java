@@ -215,7 +215,7 @@ public class TappDetector implements SensorEventListener{
 	            
 	 
 	            
-	            if(((abs_acc > 1.5) && (absval.size()==0)) || (absval.size() != 0))
+	            if(((abs_acc > 3) && (absval.size()==0)) || (absval.size() != 0))
 	            {
 	            	//Log.d("tapi", String.valueOf(abs_acc));
 	            	//if(z >Math.abs(0.5))
