@@ -52,7 +52,7 @@ public class filaEsperaSimulador {
     }
     
         // Devolve o primeiro elemento da fila de espera
-    public static filaEsperaSimulador verElementoCabeÃ§aFila(Queue<filaEsperaSimulador> queue){
+    public static filaEsperaSimulador verElementoCabeçaFila(Queue<filaEsperaSimulador> queue){
         filaEsperaSimulador packet;
         packet=queue.peek();
         if (packet!=null)

@@ -49,7 +49,7 @@ public class filaEspera {
     }
     
         // Devolve o primeiro elemento da fila de espera
-    public static filaEspera verElementoCabeÃ§aFila(Queue<filaEspera> queue){
+    public static filaEspera verElementoCabeçaFila(Queue<filaEspera> queue){
         filaEspera packet;
         packet=queue.peek();
         if (packet!=null)
@@ -58,7 +58,7 @@ public class filaEspera {
     }
     
         // Imprime o primeiro elemento da fila de espera
-    public static void imprimirCabeÃ§aFilaEspera(Queue<filaEspera> queue){
+    public static void imprimirCabeçaFilaEspera(Queue<filaEspera> queue){
         filaEspera packet;
         packet=queue.peek();
         if (packet!=null){

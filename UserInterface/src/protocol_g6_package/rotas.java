@@ -8,7 +8,7 @@ import android.util.Log;
 public class rotas {
 
     // id central
-    public static final int ENDEREÃ‡O_NULO=0;
+    public static final int ENDEREÇO_NULO=0;
         // id central
     public static final int CENTRAL=1;
         // id broadcast
@@ -56,7 +56,7 @@ public class rotas {
             tabela[i] = new rotas(i,-1,-1,0,false);
         }
         
-            // endereÃ§o broadcast
+            // endereço broadcast
         tabela[MAXNODES-1] = new rotas((MAXNODES-1),(MAXNODES-1),0,0,true);
         
         return tabela;

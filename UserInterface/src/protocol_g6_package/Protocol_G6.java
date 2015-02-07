@@ -11,7 +11,7 @@ import java.util.*;
 
 import android.util.Log;
 
-import static protocol_g6_package.rotas.ENDERE√áO_NULO;
+import static protocol_g6_package.rotas.ENDERE«O_NULO;
 import static protocol_g6_package.rotas.CENTRAL;
 import static protocol_g6_package.rotas.BROADCAST;
 import static protocol_g6_package.rotas.MAXNODES;
@@ -30,11 +30,11 @@ public class Protocol_G6 {
     public static final String LOOPBACK_ADDRESS = "127.0.0.1";
     // Vers√£o do protocolo 
     public static final int VERSAO_PROTOCOLO = 0;
-    // True se a aplica√ß√£o √© do backend e false se a aplica√ß√£o √© do android
+    // True se a aplicaÁ√£o √© do backend e false se a aplicaÁ√£o √© do android
     boolean application;
-    // Identifica√ß√£o da porta do socket
+    // IdentificaÁ√£o da porta do socket
     final int socketPort;
-    // Identifica√ß√£o do aparelho
+    // IdentificaÁ√£o do aparelho
     int deviceID;
     // No em que o protocolo est√° a ser exectuado
     no node;
@@ -64,7 +64,7 @@ public class Protocol_G6 {
         deviceID = (int) system_id;
         running = true;
 
-        // Inicializa n√≥ e as suas respectivas estruturas de informa√ß√£o
+        // Inicializa n√≥ e as suas respectivas estruturas de informaÁ√£o
         rotas[] tabelaRota = rotas.criaTabela();
         tabelaValidade[] tabValidade = tabelaValidade.criaTabelaValidade();
         Queue<filaEspera> filaout = filaEspera.criarFila(); // Fila de pacotes para sa√≠da
@@ -200,12 +200,12 @@ public class Protocol_G6 {
                         request = (rqst) threadProtocol.AppIn.readObject();
 
                         if (DEBUG) {
-                            //Log.d("Protocol_G6","Protocolo do n√≥ " + this.threadProtocol.deviceID + " recebeu um request da aplica√ß√£o (Request 0x"+Integer.toHexString(request.id)+")");
+                            //Log.d("Protocol_G6","Protocolo do n√≥ " + this.threadProtocol.deviceID + " recebeu um request da aplicaÁ√£o (Request 0x"+Integer.toHexString(request.id)+")");
                             String pac;
                             if ((request.id == ((byte) 0x00)) || (request.id == ((byte) 0x55))) {
                                 pac = pacote.byteArray2binaryString(request.packet);
                             }
-                            //Log.d("Protocol_G6","Descri√ß√£o do pacote: ");
+                            //Log.d("Protocol_G6","DescriÁ√£o do pacote: ");
                             //pacote.imprimePacote(pac);
                             //String msg = pacote.binaryStringToText(pacote.getDadosPacote(pacote.byteArray2binaryString(request.packet)));
                             //Log.d("Protocol_G6","Pacote: " + pac);
@@ -214,7 +214,7 @@ public class Protocol_G6 {
 
                         switch (request.id) {
 
-                            case (byte) 0x00: // Aplica√ß√£o recebe um pacote e envia para o protocolo
+                            case (byte) 0x00: // AplicaÁ√£o recebe um pacote e envia para o protocolo
                                 /*if (threadProtocol.node.nodeIdentification==3){
                                  Log.d("Protocol_G6","%%%%%% PACOTE");
                                  pacote.imprimePacote(pacote.byteArray2binaryString(request.packet));
@@ -248,7 +248,7 @@ public class Protocol_G6 {
                                 //Log.d("Protocol_G6","GSM= "+ threadProtocol.node.GSM);
                                 break;
 
-                            case (byte) 0x55: // Aplica√ß√£o envia para o protocolo dados que quer enviar
+                            case (byte) 0x55: // AplicaÁ√£o envia para o protocolo dados que quer enviar
 
                                 //Log.d("Protocol_G6","N√≥ " + threadProtocol.node.nodeIdentification + " recebeu mensagem do Android para enviar para a central: "
                                 //+ pacote.binaryStringToText(pacote.byteArray2binaryString(request.packet)));
@@ -331,7 +331,7 @@ public class Protocol_G6 {
 
                                 break;
                             case 0x44:
-                                //Backend informa que perdeu liga√ßao com SocketID
+                                //Backend informa que perdeu ligaÁao com SocketID
                                 //threadProtocol.removeTabelaSocketID(request.spec);
                                 for (int i = 0; i < 256; i++) {
                                     if (threadProtocol.tabelaSocketID[i][0] == (int) request.spec) {
@@ -359,7 +359,7 @@ public class Protocol_G6 {
                                  threadProtocol.AppOut.writeObject(response);
                                  threadProtocol.node.preparaPacote();*/
                                 if (numFrag == 1 || ((threadProtocol.node.flag_frag == 1) && numFrag > 1)) {
-                                    //Log.d("Protocol_G6","posso avan√ßar");
+                                    //Log.d("Protocol_G6","posso avanÁar");
                                     filaEspera.adicionarElementoFila(threadProtocol.node.fila_dados_in,
                                             pacote.byteArray2binaryString(request.packet), (int) request.spec);
                                     response = new rspns((byte) 0x00);
@@ -378,12 +378,12 @@ public class Protocol_G6 {
                                 //filaEspera.adicionarElementoFila(threadProtocol.node.fila_dados_in,
                                         //pacote.byteArray2binaryString(request.packet), request.spec);
                                 // Log.d("Protocol_G6",);
-                                //filaEspera.imprimirCabe√ßaFilaEspera(threadProtocol.node.fila_dados_in);
+                                //filaEspera.imprimirCabeÁaFilaEspera(threadProtocol.node.fila_dados_in);
                                 response = new rspns((byte) 0x00);
                                 threadProtocol.AppOut.writeObject(response);
                                 //rotas.adicionaEntradaTabela(threadProtocol.node.tabRota, 0, 30, 5);
                                 //threadProtocol.node.preparaPacote();
-                                //filaEspera.imprimirCabe√ßaFilaEspera(threadProtocol.node.filaout);
+                                //filaEspera.imprimirCabeÁaFilaEspera(threadProtocol.node.filaout);
                                 //pacote.imprimePacote(filaEspera.getDados(threadProtocol.node.filaout));
                                 break;
                             default:
@@ -428,7 +428,7 @@ public class Protocol_G6 {
                                     byte id = 0x22;
                                     byte spec = 0;
                                     byte[] packet = pacote.binaryString2byteArray(
-                                            filaEspera.verElementoCabe√ßaFila(threadProtocol.node.fila_dados_out).dados);
+                                            filaEspera.verElementoCabeÁaFila(threadProtocol.node.fila_dados_out).dados);
                                     request = new rqst(id, spec, packet);
                                    
                                     threadProtocol.ProOut.writeObject(request);
@@ -442,10 +442,10 @@ public class Protocol_G6 {
                                 // Se destino √© central e n√≥ tem GSM
                                 if (filaEspera.getDest(threadProtocol.node.filaout) == CENTRAL && threadProtocol.node.GSM == true) {
                                     //Log.d("Protocol_G6","Entrei com gsm: " + node.nodeIdentification);
-                                    //pacote.imprimePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                    //pacote.imprimePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                     byte id = 0x11;
                                     byte spec = 0x00; //GSM
-                                    byte[] packet = pacote.binaryString2byteArray(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                    byte[] packet = pacote.binaryString2byteArray(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                     request = new rqst(id, spec, packet);
                                     //Log.d("Protocol_G6","Entrei 8");
                                     threadProtocol.ProOut.writeObject(request);
@@ -453,10 +453,10 @@ public class Protocol_G6 {
                                     response = (rspns) threadProtocol.ProIn.readObject();
                                     //Log.d("Protocol_G6","Response: "+response.id);
                                     if (response.id != (byte) 0xFF) {
-                                        if ((pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == 0 && pacote.getSourcePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)
-                                                || (pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == 1 && pacote.getSourcePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)) {
+                                        if ((pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == 0 && pacote.getSourcePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)
+                                                || (pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == 1 && pacote.getSourcePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)) {
                                             //Passa Pacote enviado para Fila espera de Ack ou RRPly e remove pacote da filaout
-                                            waitingPackets.adicionarElementoLista(threadProtocol.node.fila_espera_ACK_RRply, filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                            waitingPackets.adicionarElementoLista(threadProtocol.node.fila_espera_ACK_RRply, filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                             filaEspera.removerElementoFila(threadProtocol.node.filaout);
                                             //Incrementa numero Transmissoes
                                             waitingPackets.incrementaTransmissoes(threadProtocol.node.fila_espera_ACK_RRply, threadProtocol.node.fila_espera_ACK_RRply.size() - 1);
@@ -476,24 +476,24 @@ public class Protocol_G6 {
                                 if ((filaEspera.getDest(threadProtocol.node.filaout) == CENTRAL && threadProtocol.node.GSM == false) || (filaEspera.getDest(threadProtocol.node.filaout) != CENTRAL && filaEspera.getDest(threadProtocol.node.filaout) >= 0)) {
 
                                     //Log.d("Protocol_G6","filaEspera.getDest(threadProtocol.node.filaout:"+ filaEspera.getDest(threadProtocol.node.filaout));
-                                    //Log.d("Protocol_G6","filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados:"+ filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                    //Log.d("Protocol_G6","filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados:"+ filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                     byte id = 0x11;
                                     byte spec = 0x11; //Radio
                                     //Log.d("Protocol_G6","Entrei sem gsm no: " + node.nodeIdentification);
                                     // Log.d("Protocol_G6","tamanho dadosout funcao"+threadProtocol.node.filaout.size());
-                                    //Log.d("Protocol_G6","dados: "+ filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
-                                    byte[] packet = pacote.binaryString2byteArray(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                    //Log.d("Protocol_G6","dados: "+ filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
+                                    byte[] packet = pacote.binaryString2byteArray(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                     request = new rqst(id, spec, packet);
                                     //Log.d("Protocol_G6","Entrei 9");
                                     threadProtocol.ProOut.writeObject(request);
                                     response = null;
                                     response = (rspns) threadProtocol.ProIn.readObject();
                                     if (response != null) {
-                                        if ((pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == 0 && pacote.getSourcePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)
-                                                || (pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == 1 && pacote.getSourcePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)) {
+                                        if ((pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == 0 && pacote.getSourcePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)
+                                                || (pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == 1 && pacote.getSourcePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)) {
                                             //Passa Pacote enviado para Fila espera de Ack ou RRPly e remove pacote da filaout
 
-                                            waitingPackets.adicionarElementoLista(threadProtocol.node.fila_espera_ACK_RRply, filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                            waitingPackets.adicionarElementoLista(threadProtocol.node.fila_espera_ACK_RRply, filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                             //if(threadProtocol.node.nodeIdentification==3)
                                             // waitingPackets.imprimeFila(threadProtocol.node.fila_espera_ACK_RRply);
                                             filaEspera.removerElementoFila(threadProtocol.node.filaout);
@@ -511,7 +511,7 @@ public class Protocol_G6 {
 
                                 for (int i = 0; i < threadProtocol.node.fila_espera_ACK_RRply.size(); i++) {
 
-                                    //Situa√ß√£o em que espera de um Ack ou RRply excede tempo espera, logo retransmite
+                                    //SituaÁ√£o em que espera de um Ack ou RRply excede tempo espera, logo retransmite
                                     if (i < threadProtocol.node.fila_espera_ACK_RRply.size()) {
 
                                         if (waitingPackets.hasIndex(threadProtocol.node.fila_espera_ACK_RRply, i) && waitingPackets.verElementoLista(threadProtocol.node.fila_espera_ACK_RRply, i) != null) {
@@ -618,8 +618,8 @@ public class Protocol_G6 {
                                 int nexthop = 0;
 
                             //Log.d("Protocol_G6","size: " + threadProtocol.node.filaout.size());
-                            /*Log.d("Protocol_G6","O meu destino √© "+filaEspera.verElementoCabe√ßaFila(
-                                 threadProtocol.node.filaout).destino+" e o conte√∫do da tabela GSM √© "+threadProtocol.tabelaSocketID[filaEspera.verElementoCabe√ßaFila(
+                            /*Log.d("Protocol_G6","O meu destino √© "+filaEspera.verElementoCabeÁaFila(
+                                 threadProtocol.node.filaout).destino+" e o conte√∫do da tabela GSM √© "+threadProtocol.tabelaSocketID[filaEspera.verElementoCabeÁaFila(
                                  threadProtocol.node.filaout).destino]);*/
                                 //Se nao houver o socketID para o no para onde
                                 //se quer enviar o pacote
@@ -627,14 +627,14 @@ public class Protocol_G6 {
                             /*for (int i = 0; i < 256; i++) {
                                  Log.d("Protocol_G6","valor da tabela pos "+ i + " valor: " + tabelaSocketID[i]);
                                  }*/
-                                if (threadProtocol.tabelaSocketID[filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).destino][0] != NO_SOCKET) {
-                                    spec = (byte) threadProtocol.tabelaSocketID[filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).destino][0];
-                                    nexthop = threadProtocol.tabelaSocketID[filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).destino][1];
+                                if (threadProtocol.tabelaSocketID[filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).destino][0] != NO_SOCKET) {
+                                    spec = (byte) threadProtocol.tabelaSocketID[filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).destino][0];
+                                    nexthop = threadProtocol.tabelaSocketID[filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).destino][1];
                                     //Log.d("Protocol_G6","entrei 1");
                                 } // Segundo tenta enviar pelo next hop do pacote 
-                                else if (threadProtocol.tabelaSocketID[pacote.getNextHopPacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados)][0] != NO_SOCKET) {
-                                    spec = (byte) threadProtocol.tabelaSocketID[pacote.getNextHopPacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados)][0];
-                                    nexthop = threadProtocol.tabelaSocketID[pacote.getNextHopPacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados)][1];
+                                else if (threadProtocol.tabelaSocketID[pacote.getNextHopPacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados)][0] != NO_SOCKET) {
+                                    spec = (byte) threadProtocol.tabelaSocketID[pacote.getNextHopPacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados)][0];
+                                    nexthop = threadProtocol.tabelaSocketID[pacote.getNextHopPacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados)][1];
                                     //Log.d("Protocol_G6","entrei 2");
                                 } // Se nenhum dos casos anteriores funcionar tenta enviar por um socket qualquer que esteja activo
                                 else {
@@ -649,29 +649,29 @@ public class Protocol_G6 {
                                 }
 
                                 //Log.d("Protocol_G6","size2: " + threadProtocol.node.filaout.size());
-                                filaEspera auxElement = filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout);
+                                filaEspera auxElement = filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout);
 
                                 /*
-                                 auxElement.destino=filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).destino;
-                                 auxElement.nRetransmissoes=filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).nRetransmissoes;
-                                 auxElement.time=filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).time;
-                                 auxElement.socketID=filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).socketID;
+                                 auxElement.destino=filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).destino;
+                                 auxElement.nRetransmissoes=filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).nRetransmissoes;
+                                 auxElement.time=filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).time;
+                                 auxElement.socketID=filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).socketID;
                                  */
-                                int k = pacote.getNextHopPacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                int k = pacote.getNextHopPacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
 
                                 //Log.d("Protocol_G6","size2: " + threadProtocol.node.filaout.size());
                                 if (k == 0) { // Dados que o backend quer enviar para um Android
                                     // Aqui vai-se alterar somente o nextHop do pacote de acordo com o socket id dispon√≠vel
-                                    auxElement.dados = pacote.setNewHeadersPacote(filaEspera.verElementoCabe√ßaFila(
-                                            threadProtocol.node.filaout).dados, pacote.getTTLPacote(filaEspera.verElementoCabe√ßaFila(
-                                                            threadProtocol.node.filaout).dados), pacote.getOrigSourcePacote(filaEspera.verElementoCabe√ßaFila(
+                                    auxElement.dados = pacote.setNewHeadersPacote(filaEspera.verElementoCabeÁaFila(
+                                            threadProtocol.node.filaout).dados, pacote.getTTLPacote(filaEspera.verElementoCabeÁaFila(
+                                                            threadProtocol.node.filaout).dados), pacote.getOrigSourcePacote(filaEspera.verElementoCabeÁaFila(
                                                             threadProtocol.node.filaout).dados), nexthop);
 
                                 } else {
-                                    auxElement.dados = filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados;
+                                    auxElement.dados = filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados;
                                 }
                                 /*if(!threadProtocol.tabelaSocketID.containsKey(
-                                 (byte)filaEspera.verElementoCabe√ßaFila(
+                                 (byte)filaEspera.verElementoCabeÁaFila(
                                  threadProtocol.node.filaout).destino))
                                  {
                                  Log.d("Protocol_G6","Contenho Key");
@@ -679,12 +679,12 @@ public class Protocol_G6 {
                                  }
                                  else{
                                  spec = threadProtocol.tabelaSocketID.get(
-                                 (byte)filaEspera.verElementoCabe√ßaFila(
+                                 (byte)filaEspera.verElementoCabeÁaFila(
                                  threadProtocol.node.filaout).destino);
                                  }*/
                                 //Log.d("Protocol_G6","SPEC: " + spec);
                                 if (spec != (byte) NO_SOCKET) {
-                                    if (pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(
+                                    if (pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(
                                             threadProtocol.node.filaout).dados) == 1) {
                                         // Apaga se for Route Request
                                         filaEspera.removerElementoFila(threadProtocol.node.filaout);
@@ -693,7 +693,7 @@ public class Protocol_G6 {
                                         //pacote.imprimePacote(auxElement.dados);
                                         packet = pacote.binaryString2byteArray(auxElement.dados);
                                         //Log.d("Protocol_G6","");
-                                        //pacote.imprimePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                        //pacote.imprimePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
                                         //Log.d("Protocol_G6","\n SPEC: "+spec+"   id: "+id);
                                         //Log.d("Protocol_G6","");
 
@@ -714,10 +714,10 @@ public class Protocol_G6 {
                                             // remove pacote da fila de espera de pacotes filaout
                                             // adiciona pacote √† fila de Acks
                                             // Log.d("Protocol_G6","Fila out: ");
-                                            //pacote.imprimePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
-                                            if ((pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == 0 && pacote.getSourcePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)
-                                                    || (pacote.getTypePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == 1 && pacote.getSourcePacote(filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)) {
-                                                waitingPackets.adicionarElementoLista(threadProtocol.node.fila_espera_ACK_RRply, filaEspera.verElementoCabe√ßaFila(threadProtocol.node.filaout).dados);
+                                            //pacote.imprimePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
+                                            if ((pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == 0 && pacote.getSourcePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)
+                                                    || (pacote.getTypePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == 1 && pacote.getSourcePacote(filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados) == threadProtocol.node.nodeIdentification)) {
+                                                waitingPackets.adicionarElementoLista(threadProtocol.node.fila_espera_ACK_RRply, filaEspera.verElementoCabeÁaFila(threadProtocol.node.filaout).dados);
 
                                                 waitingPackets.incrementaTransmissoes(threadProtocol.node.fila_espera_ACK_RRply, threadProtocol.node.fila_espera_ACK_RRply.size() - 1);
                                                 //Mete tempo atual do sistema para contabilizar quanto tempo demora Ack ou RRply
@@ -746,7 +746,7 @@ public class Protocol_G6 {
                             byte[] packet;
 
                             packet = pacote.binaryString2byteArray(
-                                    filaEspera.verElementoCabe√ßaFila(
+                                    filaEspera.verElementoCabeÁaFila(
                                             threadProtocol.node.fila_dados_out).dados);
                             rqst req = new rqst(id, spec, packet);
                             //Log.d("Protocol_G6","Entrei 13");
@@ -765,7 +765,7 @@ public class Protocol_G6 {
 
                                 if (waitingPackets.hasIndex(threadProtocol.node.fila_espera_ACK_RRply, i)) {
                                     if (threadProtocol.node.fila_espera_ACK_RRply.get(i) != null) {//waitingPackets.verElementoLista(threadProtocol.node.fila_espera_ACK_RRply, i) != null) {
-                                        //Situa√ß√£o em que espera de um Ack ou RRply excede tempo espera, logo retransmite
+                                        //SituaÁ√£o em que espera de um Ack ou RRply excede tempo espera, logo retransmite
                                         if (!threadProtocol.node.fila_espera_ACK_RRply.isEmpty()
                                                 && (System.currentTimeMillis() - waitingPackets.getTime(threadProtocol.node.fila_espera_ACK_RRply, i) > t_espera) && waitingPackets.hasIndex(threadProtocol.node.fila_espera_ACK_RRply, i) && pacote.getSourcePacote(waitingPackets.verElementoLista(threadProtocol.node.fila_espera_ACK_RRply, i).waitPacket) == threadProtocol.node.nodeIdentification) {
 

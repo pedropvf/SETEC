@@ -6,7 +6,7 @@ import java.util.Queue;
 
 import android.util.Log;
 import static protocol_g6_package.Protocol_G6.VERSAO_PROTOCOLO;
-import static protocol_g6_package.rotas.ENDEREÇO_NULO;
+import static protocol_g6_package.rotas.ENDERE�O_NULO;
 import static protocol_g6_package.rotas.CENTRAL;
 import static protocol_g6_package.rotas.BROADCAST;
 import static protocol_g6_package.rotas.MAXNODES;
@@ -72,7 +72,7 @@ public class no {
         filaEspera.adicionarElementoFila(this.filaout, Npcket, dest);
         /*Log.d("no","\n\nFILA OUT");
          Log.d("no","tamanho filaout: "+filaout.size());
-         filaEspera.imprimirCabeçaFilaEspera(this.filaout);
+         filaEspera.imprimirCabe�aFilaEspera(this.filaout);
          Log.d("no","\n\n");
          pacote.imprimePacote(filaEspera.getDados(filaout));
          Log.d("no","\n\n");*/
@@ -85,12 +85,12 @@ public class no {
                 
         int versao, id, source;
        
-        if (filaEspera.verElementoCabeçaFila(this.filain) != null) { //verifica se tem elementos na fila
+        if (filaEspera.verElementoCabe�aFila(this.filain) != null) { //verifica se tem elementos na fila
 
             /*
              if (nodeIdentification==3){
              Log.d("no","\nXXXXXX");
-             pacote.imprimePacote(filaEspera.verElementoCabeçaFila(this.filain).dados);
+             pacote.imprimePacote(filaEspera.verElementoCabe�aFila(this.filain).dados);
              }*/
             /*if(this.nodeIdentification==1){  
              Log.d("no","PACOTE RECEBIDO PELA CENTRAL");
@@ -279,9 +279,9 @@ public class no {
                         //Log.d("no","Je " + this.nodeIdentification +" Recebi pacote de info do no "+source);
                         if (DEBUG_FINAL) {
                             if (this.nodeIdentification != 1) {
-                                Log.d("no","Nó " + this.nodeIdentification + " recebe Info (com fragmentação)");
+                                Log.d("no","Nó " + this.nodeIdentification + " recebe Info (com fragmenta�ão)");
                             } else {
-                                Log.d("no","Backend recebe Info (com fragmentação)");
+                                Log.d("no","Backend recebe Info (com fragmenta�ão)");
                             }
 
                         }
@@ -299,9 +299,9 @@ public class no {
                         //pacote.imprimePacote(Ack);
                         if (DEBUG_FINAL) {
                             if (this.nodeIdentification != 1) {
-                                Log.d("no","Nó " + this.nodeIdentification + " recebe Info (sem fragmentação)");
+                                Log.d("no","Nó " + this.nodeIdentification + " recebe Info (sem fragmenta�ão)");
                             } else {
-                                Log.d("no","Backend recebe Info (sem fragmentação)");
+                                Log.d("no","Backend recebe Info (sem fragmenta�ão)");
                             }
 
                         }
@@ -445,13 +445,13 @@ public class no {
 
     public int preparaPacote() {
 
-        if (filaEspera.verElementoCabeçaFila(this.fila_dados_in) != null) {
+        if (filaEspera.verElementoCabe�aFila(this.fila_dados_in) != null) {
             int numFrag = calculaNumFragmentos(filaEspera.getDados(this.fila_dados_in));
             if (this.flag_frag == 1 || numFrag == 0) {
 
                 if (this.Flag_app_Back == 0) {
                     //Prepara Pacote para dados recebidos do Android
-                    if (filaEspera.verElementoCabeçaFila(this.fila_dados_in) != null) {
+                    if (filaEspera.verElementoCabe�aFila(this.fila_dados_in) != null) {
                         //dest e sempre central
                         int dest = CENTRAL;
                         int ttl = 255;
@@ -461,7 +461,7 @@ public class no {
                         if (rotas.getEntradaTabela(this.tabRota, dest) != -1) {
 
                             if (DEBUG_DETAILED) {
-                                Log.d("no","Nó " + this.nodeIdentification + " quer enviar informação e tem rota.");
+                                Log.d("no","Nó " + this.nodeIdentification + " quer enviar informa�ão e tem rota.");
                             }
                             int nHop = rotas.getEntradaTabela(this.tabRota, dest);
                             int TotalFragments = this.calculaNumFragmentos(dados);
@@ -484,7 +484,7 @@ public class no {
                         } else if (espera_rrply == 0) {
 
                             if (DEBUG_DETAILED) {
-                                Log.d("no","Nó " + this.nodeIdentification + " quer enviar informação mas não tem rota. Envia RRequest e espera RReply ");
+                                Log.d("no","Nó " + this.nodeIdentification + " quer enviar informa�ão mas não tem rota. Envia RRequest e espera RReply ");
                             }
                             int nHop = 0;
                             int TotalFragments = this.calculaNumFragmentos(dados);
@@ -542,7 +542,7 @@ public class no {
                     return 1;
                 } else { //Central
                     //Prepara Pacote para dados recebidos do Backhend
-                    if (filaEspera.verElementoCabeçaFila(this.fila_dados_in) != null) {
+                    if (filaEspera.verElementoCabe�aFila(this.fila_dados_in) != null) {
 
                         int dest = filaEspera.getDest(this.fila_dados_in);
                         //dest e sempre central
@@ -571,7 +571,7 @@ public class no {
                          //rotas.adicionaEntradaTabela(this.tabRota, CENTRAL, 2, 0);
                          if (rotas.getEntradaTabela(this.tabRota, dest) != -1) {
                          if (DEBUG) {
-                         Log.d("no","Nó " + this.nodeIdentification + " quer enviar informação e tem rota.");
+                         Log.d("no","Nó " + this.nodeIdentification + " quer enviar informa�ão e tem rota.");
                          }
                          int nHop = rotas.getEntradaTabela(this.tabRota, dest);
                          int TotalFragments = this.calculaNumFragmentos(dados);
@@ -592,7 +592,7 @@ public class no {
 
                          } else if (espera_rrply == 0) {
                          if (DEBUG_DETAILED) {
-                         Log.d("no","Nó " + this.nodeIdentification + " quer enviar informação mas não tem rota. Envia RRequest e espera RReply ");
+                         Log.d("no","Nó " + this.nodeIdentification + " quer enviar informa�ão mas não tem rota. Envia RRequest e espera RReply ");
                          }
 
                          int nHop = 0;
