@@ -22,9 +22,12 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.os.Vibrator;
+import android.content.Context;
+import android.view.View;
 
 public class TappDetector implements SensorEventListener{
-
+	public Vibrator vibrator;
 	/* Class Variables */
 	public boolean enabledTaps=false;
 	
@@ -74,15 +77,18 @@ public class TappDetector implements SensorEventListener{
 	boolean goOn=true;
 	
 	boolean repeticao = false;
+	//public Vibrator vib;
+	 
 	
     public TappDetector(MainUI _parent, Activity _act) {
     	parentClass=_parent;
     	act=_act;
     	
-    	
         /* Sensor Management */
         senSensorManager = (SensorManager) _act.getSystemService(_act.getApplicationContext().SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        
+    //    vib = (Vibrator) this.parentClass.getSystemService(Context.VIBRATOR_SERVICE);
         
         /* sound management */
         /* sound management */
@@ -91,6 +97,8 @@ public class TappDetector implements SensorEventListener{
         alarm2 = MediaPlayer.create(act, R.raw.dead_man_alert_2);
         deadManAlarm = MediaPlayer.create(act, R.raw.dead_man_alert_3);
         tap = MediaPlayer.create(act, R.raw.tap);
+        //tap = MediaPlayer.create(act, R.raw.beep);
+        
         
         /* user interface */
     	vibrateThreshold = senAccelerometer.getMaximumRange() / 2;
@@ -215,33 +223,21 @@ public class TappDetector implements SensorEventListener{
 	            
 	 
 	            
-	            if(((abs_acc > 3) && (absval.size()==0)) || (absval.size() != 0))
+	            if(((abs_acc > 2.6) && (absval.size()==0)) || (absval.size() != 0))
 	            {
-	            	//Log.d("tapi", String.valueOf(abs_acc));
-	            	//if(z >Math.abs(0.5))
 	            		absval.add(abs_acc);
-	            	//valz.add(deltaZ);
 	            }
 	            
 	            if((absval.size() == 10))
 	            {
-	            	for(int i=0; i<10; i++){
-	            		//Log.d("vals" ,  String.valueOf(absval.get(i)));
-	            		//Log.d("val2" ,  String.valueOf(valz.get(i)));
-	            	}
-	            	
 	            	if(((absval.get(9)<1) && (absval.get(8)<1) && (absval.get(7)<1) && (absval.get(6)<1)))
 	            	{	
-	            		//if(Math.abs(Collections.max(valz)) > 1.0)
-	            		//{
 	            			tap1=1;
-	            			//Log.d("tapi", "TAP");
 	            			tap.start();
-	            		//}
+	            		//	vib.vibrate(200);
 	            		
 	            	}
 	            	absval.removeAll(absval);
-	          //  	valz.removeAll(valz);
 	            }
 	            
 	            
@@ -269,13 +265,13 @@ public class TappDetector implements SensorEventListener{
                     Log.d("coisa" ,  String.valueOf(flagTap) + " taps detected" + "tempo=" + String.valueOf(tempo));
                    
 
-                    if((flagTap==2) && (tempo < 900)){
+                    if((flagTap==2) && (tempo < 1000)){
 	                     
 	                     ok=1;
 	                     lastimpulse = curTime;
                     }    
                     
-                    if((flagTap==3) && (ok==0) && (tempo>900)){
+                    if((flagTap==3) && (ok==0) && (tempo>1000)){
 	                     Log.d("coisa" , "SOS message");
 	                     parentClass.speak("SOS");
 	                     Log.d("coisa" , "tempo" + tempo);
@@ -283,7 +279,7 @@ public class TappDetector implements SensorEventListener{
 						Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_SOS);
 	                     
                     }
-                    if((flagTap==3) && (ok==1) && (tempo < 900))
+                    if((flagTap==3) && (ok==1) && (tempo < 1000))
                     {
                     	Log.d("coisa" , "surrounded");
                     	ok=0;
@@ -294,7 +290,7 @@ public class TappDetector implements SensorEventListener{
                     	
                     }
                     
-                    if((flagTap==3) && (ok==1) && (tempo > 900))
+                    if((flagTap==3) && (ok==1) && (tempo > 1000))
                     {
                     	Log.d("coisa" , "nada");
                     	ok=0;
@@ -348,6 +344,8 @@ public class TappDetector implements SensorEventListener{
 	    }
 	    
 	}
+	
+
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {

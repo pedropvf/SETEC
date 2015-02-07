@@ -129,6 +129,8 @@ public class Message {
 	public static void send(int messageType, int number) {
 		// types 1, 2, 10, 14, 15, 16, 17, 18
 		//firemanID = MainUI.firemanID;
+		
+		Log.d("Message", "Number = "+number);
 		byte[] pfinal = new byte[] { (byte) messageType, firemanID,
 				(byte) number };
 
@@ -456,6 +458,7 @@ public class Message {
 			});
 			break;
 		case 136:
+			//automatic alert response
 			userInterface.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {

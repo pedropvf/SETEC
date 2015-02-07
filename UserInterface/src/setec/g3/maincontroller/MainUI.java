@@ -656,8 +656,8 @@ public class MainUI extends Activity implements SensorEventListener{
 		textToSpeechHandler = new TextToSpeechHandler(this);
 		
 		/* camera access for LED usage */
-		camera = Camera.open(); 
-        p = camera.getParameters(); 
+		//camera = Camera.open(); 
+        //p = camera.getParameters(); 
         
         /* vibrator */
         root.setVibrator((Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE));

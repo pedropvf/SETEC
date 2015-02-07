@@ -2120,12 +2120,12 @@ public class FlyOutContainer extends RelativeLayout {
 			Button send = null;
 			final int index=groupPosition+1;
 			// because the list on the user side doesn't have all predefined messages
-			final int pdmCode;
-				if(index-1<4){
+			final int pdmCode = index-1;
+			/*	if(index-1<4){
 					pdmCode=index-1;
 				} else {
 					pdmCode=index-1+2;
-				}
+				}*/
 		    if (convertView == null) {
 		      convertView = inflater.inflate(R.layout.pre_defined_messages_row_group, null);
 		    }
@@ -2150,7 +2150,7 @@ public class FlyOutContainer extends RelativeLayout {
 	            	postMessage("You", new StringBuilder(prefix).append(pdmCode).append("][ ").append(group.string).append(" ]").toString(), PriorityLevel.CRITICAL, true);
 	            	vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
 	            	toastMessage("Predefined Message sent.",Toast.LENGTH_SHORT, 0, 0);
-	            	Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_PREDEFINED_MESSAGE, pdmCode);
+	            	Message.send(CommEnumerators.FIREFIGHTER_TO_COMMAND_PREDEFINED_MESSAGE, pdmCode);
 	            	parentClass.parseOutgoingPredefinedMessage(pdmCode);
 	            }
 		    });
