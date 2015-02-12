@@ -41,9 +41,9 @@ public class Login extends Activity {
 	/* The parameters variables */
 	//private String ninjaUsername="g3";
 	//private String ninjaPassword="g3";
-	private String defaultIP = "192.168.10.143";
-	private String defaultPort = "4444";
-	private String defaultUser = "12121212";
+	private String defaultIP = "172.30.3.58";
+	private String defaultPort = "3000";
+	private String defaultUser = "121212";
 	private String defaultPass = "teste";
 	private String defaultTeam = "1";
 	private boolean isConnected=false;

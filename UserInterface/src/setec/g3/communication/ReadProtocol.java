@@ -13,7 +13,6 @@ import setec.g3.maincontroller.MainUI;
 
 import android.util.Log;
 import androidBackendAPI.Packet;
-import protocol_g6_package.Protocol_G6;
 
 public class ReadProtocol extends Thread {
 	
@@ -205,15 +204,15 @@ public class ReadProtocol extends Thread {
 			        public void run(){
 			        	Log.d("ReadProtocol","Initiating G6 protocol");
 			        	Protocol_G6 g6 = new Protocol_G6(false, port, (byte)system_id);
-			        	try {
+			        	//try {
 							g6.execute();
-						} catch (ClassNotFoundException e) {
+						/*} catch (ClassNotFoundException e) {
 							Log.e("ReadProtocol", e.toString());
 						} catch (IOException e) {
 							Log.e("ReadProtocol", e.toString());
 						} catch (InterruptedException e) {
 							Log.e("ReadProtocol", e.toString());
-						}
+						}*/
 			        }
 			    };
 			    threadG6.start();

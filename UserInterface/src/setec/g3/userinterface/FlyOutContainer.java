@@ -2271,7 +2271,7 @@ public class FlyOutContainer extends RelativeLayout {
 	/*
 	 * updates radio battery indicator appearance and state variable
 	 */
-	public void updateRadioIndicator(indicatorStates radioBatteryStatus){
+	public void updateNetworkStatus(indicatorStates radioBatteryStatus){
 		this.radioBatteryStatus=radioBatteryStatus;
 		switch(radioBatteryStatus){
 			case EMPTY:

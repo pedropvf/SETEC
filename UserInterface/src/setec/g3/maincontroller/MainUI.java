@@ -656,8 +656,8 @@ public class MainUI extends Activity implements SensorEventListener{
 		textToSpeechHandler = new TextToSpeechHandler(this);
 		
 		/* camera access for LED usage */
-		//camera = Camera.open(); 
-        //p = camera.getParameters(); 
+		camera = Camera.open(); 
+        p = camera.getParameters(); 
         
         /* vibrator */
         root.setVibrator((Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE));
@@ -859,26 +859,26 @@ public class MainUI extends Activity implements SensorEventListener{
 		}
 		root.updateBatteryIndicator(batteryStatus);
 	}
-	public void updateRadioBatteryStatus(int status){
-		indicatorStates radioBatteryStatus=indicatorStates.EMPTY;
+	public void updateNetworkStatus(int status){
+		indicatorStates netStatus=indicatorStates.EMPTY;
 		switch (status){
 			case 0:
-				radioBatteryStatus=indicatorStates.EMPTY;
+				netStatus=indicatorStates.EMPTY;
 				break;
 			case 1:
-				radioBatteryStatus=indicatorStates.LOW;
+				netStatus=indicatorStates.LOW;
 				break;
 			case 2:
-				radioBatteryStatus=indicatorStates.MEDIUM;
+				netStatus=indicatorStates.MEDIUM;
 				break;
 			case 3:
-				radioBatteryStatus=indicatorStates.HIGH;
+				netStatus=indicatorStates.HIGH;
 				break;
 			case 4:
-				radioBatteryStatus=indicatorStates.FULL;
+				netStatus=indicatorStates.FULL;
 				break;
 		}
-		root.updateRadioIndicator(radioBatteryStatus);
+		root.updateNetworkStatus(netStatus);
 	}
 	public void updateWifiStatus(int status){
 		indicatorStates wifiStatus=indicatorStates.EMPTY;
@@ -1175,11 +1175,54 @@ public class MainUI extends Activity implements SensorEventListener{
 		}
 	}
 	public void parseObjectiveRecived(float lat, float lon){
+		Log.d("TARGET", "NEw coords-> lat: "+lat+" & long: "+lon);
 		this.playObjectiveReceived();
 		this.Olat=(double)lat;
 		this.Olong=(double)lon;
-		this.root.postMessage("Comando", "Novo objetivo recebido. Ativar orientação.", PriorityLevel.CRITICAL, false);
-		toggleCompassTargetMode();
+		if(targetMode){
+			this.speak("Objetivo Recebido, para entrar em modo de objetivo, bata duas vezes no telemóvel.");
+			tapDetector.startWaitingForOkForTarget();
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			if(language==UILanguage.EN){
+				builder.setTitle("Target Mode");
+			} else if (language==UILanguage.PT){
+				builder.setTitle("Modo de Objetivo");
+			}
+			Log.d("logout", "Building Logout dialog");
+			if(language==UILanguage.EN){
+				builder.setMessage("Do you want to go into Target Mode?");
+				builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog, int which) {
+				    	toggleCompassTargetMode();
+				        dialog.dismiss();
+				    }
+				});
+				builder.setNegativeButton(" No ", new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				        dialog.dismiss();
+				    }
+				});
+			} else if (language==UILanguage.PT){
+				builder.setMessage("Quer entrar em Modo de Objetivo??");
+				builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog, int which) {
+				    	toggleCompassTargetMode();
+				        dialog.dismiss();
+				    }
+				});
+				builder.setNegativeButton(" Não ", new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				        dialog.dismiss();
+				    }
+				});
+			}
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+		
 	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/

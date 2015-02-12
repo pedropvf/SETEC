@@ -79,6 +79,11 @@ public class TappDetector implements SensorEventListener{
 	boolean repeticao = false;
 	//public Vibrator vib;
 	 
+
+	public boolean waitingToToggleTarget=false;
+	public long startWaitingToToggleTarget;
+	public long waitLimit = 600000;
+	
 	
     public TappDetector(MainUI _parent, Activity _act) {
     	parentClass=_parent;
@@ -249,6 +254,7 @@ public class TappDetector implements SensorEventListener{
 	            	{
 	            		Log.d("coisa" , "OK message");
 	            		parentClass.speak("OK");
+	            		toggleTargetIfNeeded();
 	            		if(parentClass.waiting_ok==true){
 	            			ok_reproduced=1;
 	            		}
@@ -345,7 +351,17 @@ public class TappDetector implements SensorEventListener{
 	    
 	}
 	
-
+	public void startWaitingForOkForTarget(){
+		waitingToToggleTarget=true;
+		startWaitingToToggleTarget=System.currentTimeMillis();
+	}
+	
+	public void toggleTargetIfNeeded(){
+		if(waitingToToggleTarget && ((System.currentTimeMillis()-startWaitingToToggleTarget)<waitLimit)){
+			parentClass.toggleCompassTargetMode();
+			waitingToToggleTarget=false;
+		}
+	}
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
