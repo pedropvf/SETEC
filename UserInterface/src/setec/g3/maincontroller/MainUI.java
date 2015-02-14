@@ -928,14 +928,19 @@ public class MainUI extends Activity implements SensorEventListener{
 	 */
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		
+		northDegree= -Math.round(event.values[0]);
+		
+		
 		if (targetMode){
 			double Deltalat;
 			double Deltalong;
 			double theta;
 			double gama;
+			double alpha; //angulo que o objecto faz com o norte
 			
 			
-			northDegree= Math.toRadians(Math.round(event.values[0]));
+			alpha= Math.toRadians(Math.round(event.values[0]));
 
 			Location location=gps.getLocation();
 			if(location!=null){
@@ -949,15 +954,13 @@ public class MainUI extends Activity implements SensorEventListener{
 						
 				gama= (-gama + Math.PI/2);
 
-				theta = (gama-northDegree);
+				theta = (gama-alpha);
 					
 				targetDegree= Math.toDegrees(theta);			
 			} else {
 				root.reportNoGPSSignal();
 			}
-		} else {
-			northDegree= -Math.toDegrees(Math.toRadians(Math.round(event.values[0])));
-		}	
+		} 	
 	}
 	/*
 	 * Unimplemented Method
@@ -993,16 +996,7 @@ public class MainUI extends Activity implements SensorEventListener{
 				
 				double tolerancia=20; // Fronteira para considerar que o bombeiro chegou ao destino
 				
-				double Mlat= location.getLatitude();
-				double Mlong= location.getLongitude();
-			
-				double Deltalat= Olat-Mlat;
-				double Deltalong= Olong-Mlong;
-				
-				Deltalong=(float) (Math.PI*Deltalong*Math.cos(Math.toRadians(Math.abs(Mlat)))*((float)rt)/180);
-				Deltalat=(float) (Math.PI*Deltalat*((float)rt)/180);
-				
-				double dist=Math.sqrt(Deltalong*Deltalong + Deltalat*Deltalat);
+				double dist=coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong);
 				
 				if(dist<=tolerancia){
 		
@@ -1021,6 +1015,17 @@ public class MainUI extends Activity implements SensorEventListener{
 		}
 	}
 	
+	public double coordDist(double Mlat, double Mlong, double Olat, double Olong) {
+	
+		double Deltalat= Olat-Mlat;
+		double Deltalong= Olong-Mlong;
+		
+		Deltalong=(float) (Math.PI*Deltalong*Math.cos(Math.toRadians(Math.abs(Mlat)))*((float)rt)/180);
+		Deltalat=(float) (Math.PI*Deltalat*((float)rt)/180);
+		
+		return Math.sqrt(Deltalong*Deltalong + Deltalat*Deltalat);
+	}
+	
 	/*
 	 * This runnable controls the voice guidance system of the target mode
 	 */
@@ -1031,37 +1036,39 @@ public class MainUI extends Activity implements SensorEventListener{
 		private boolean left=false;
 		private boolean right=false;
 		
+		Location location=gps.getLocation();
+		
 		@Override
 		public void run() {
 			if (targetMode){
 					double margem=10;
-					Log.d("GPS Guide", "Angulo reduzido= "+volta1(targetDegree));
+					Log.d("GPS Guide", "Angulo reduzido= " + volta1(targetDegree));
 					if((volta1(targetDegree) >= -130) && (volta1(targetDegree) <= -10) ){
-						speak("Vire √† esquerda!");
+						speak("Vire ‡† esquerda," + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=true;
 						front=false;
 						back=false;
 						right=false;
 					} else if((volta1(targetDegree) <= 130) && (volta1(targetDegree) >= 10) ) {
-						speak("Vire √† direita!" );
+						speak("Vire ‡† direita,"  + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros." );
 						left=false;
 						front=false;
 						back=false;
 						right=true;
 					} else if(((volta1(targetDegree) >= -10) && (volta1(targetDegree) <= 10) && front==false) ) {
-						speak("Siga em frente!");
+						speak("Siga em frente," + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=false;
 						front=true;
 						back=false;
 						right=false;
 					} else if ((volta1(targetDegree) < -130) || (volta1(targetDegree) > 130) ) {
-						speak("Volte para tr√°s");
+						speak("Volte para tr·s" + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=false;
 						front=false;
 						back=false;
 						right=false;
 					} else {
-						speak("Continue");
+						speak("Continue por" + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 					}
 			}
 			gpsTargetGuideHandler.postDelayed(gpsTargetGuideRunnable, gpsTargetGuideDelta);
