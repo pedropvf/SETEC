@@ -289,7 +289,7 @@ public class GPSTracker implements LocationListener {
 	    	double Mlong = gpsLocation.getLongitude();
 	    	
 	    	Mlat = Mlat + (180*dist*Math.cos(Math.toRadians(Ndegrees))/(Math.PI*(rt)));
-	    	Mlong = Mlong + ((180*dist*Math.sin(Math.toRadians(Ndegrees)))/(Math.PI*Math.cos(Math.toRadians(Math.abs(Mlat)))*(rt)));
+	    	Mlong = Mlong + ((180*dist*Math.sin(Math.toRadians(Ndegrees)))/(Math.PI*Math.cos(Math.abs(Mlat))*(rt)));
 	    	
 	    	coord[0]=Mlat;
 	    	coord[1]=Mlong;
