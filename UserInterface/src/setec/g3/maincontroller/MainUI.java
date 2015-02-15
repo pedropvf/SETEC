@@ -156,7 +156,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	private long gpsDistanceRunnableDelta = 1000;
 	private long gpsCompassAngleDelta=50;
 	protected Handler gpsTargetGuideHandler = new Handler();
-	protected Runnable gpsTargetGuideRunnable  = new GpsTargetGuideRunnable();
+	protected Runnable gpsTargetGuideRunnable;
 	private long gpsTargetGuideDelta = 3000;
 	double northDegree;
 	double targetDegree;
@@ -665,6 +665,7 @@ public class MainUI extends Activity implements SensorEventListener{
         /* initialize your android device sensor capabilities */
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		gps = new GPSTracker(this);
+		gpsTargetGuideRunnable  = new GpsTargetGuideRunnable();
 		
 		/* activate compass */
 		setCompassOperation(compassEnabled);
@@ -1044,13 +1045,13 @@ public class MainUI extends Activity implements SensorEventListener{
 					double margem=10;
 					Log.d("GPS Guide", "Angulo reduzido= " + volta1(targetDegree));
 					if((volta1(targetDegree) >= -130) && (volta1(targetDegree) <= -10) ){
-						speak("Vire à  esquerda," + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Vire ï¿½ esquerda," + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=true;
 						front=false;
 						back=false;
 						right=false;
 					} else if((volta1(targetDegree) <= 130) && (volta1(targetDegree) >= 10) ) {
-						speak("Vire à  direita,"  + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros." );
+						speak("Vire ï¿½ direita,"  + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros." );
 						left=false;
 						front=false;
 						back=false;
@@ -1062,7 +1063,7 @@ public class MainUI extends Activity implements SensorEventListener{
 						back=false;
 						right=false;
 					} else if ((volta1(targetDegree) < -130) || (volta1(targetDegree) > 130) ) {
-						speak("Volte para trás" + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Volte para trï¿½s" + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=false;
 						front=false;
 						back=false;
