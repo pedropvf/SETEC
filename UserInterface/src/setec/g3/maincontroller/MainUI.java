@@ -160,6 +160,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	private long gpsTargetGuideDelta = 3000;
 	double northDegree;
 	double targetDegree;
+	Location location;
 	
 	/* logout and exit */
 	private Button logoutBtn, exitBtn;
@@ -665,6 +666,7 @@ public class MainUI extends Activity implements SensorEventListener{
         /* initialize your android device sensor capabilities */
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		gps = new GPSTracker(this);
+		location=gps.getLocation();
 		gpsTargetGuideRunnable  = new GpsTargetGuideRunnable();
 		
 		/* activate compass */
@@ -932,6 +934,7 @@ public class MainUI extends Activity implements SensorEventListener{
 		
 		northDegree= -Math.round(event.values[0]);
 		
+		location = gps.getLocation();
 		
 		if (targetMode){
 			double Deltalat;
@@ -943,7 +946,6 @@ public class MainUI extends Activity implements SensorEventListener{
 			
 			alpha= Math.toRadians(Math.round(event.values[0]));
 
-			Location location=gps.getLocation();
 			if(location!=null){
 				double Mlat= location.getLatitude();
 				double Mlong= location.getLongitude();
@@ -992,7 +994,6 @@ public class MainUI extends Activity implements SensorEventListener{
 	protected class GpsDistanceRunnable implements Runnable {			
 		@Override
 		public void run() {
-			Location location=gps.getLocation();
 			if(location!=null){ 
 				
 				double tolerancia=20; // Fronteira para considerar que o bombeiro chegou ao destino
@@ -1037,42 +1038,45 @@ public class MainUI extends Activity implements SensorEventListener{
 		private boolean left=false;
 		private boolean right=false;
 		
-		Location location=gps.getLocation();
+		
 		
 		@Override
 		public void run() {
+			if(location!=null){
 			if (targetMode){
 					double margem=10;
+					speak("Modo objectivo ativado!");
 					Log.d("GPS Guide", "Angulo reduzido= " + volta1(targetDegree));
 					if((volta1(targetDegree) >= -130) && (volta1(targetDegree) <= -10) ){
-						speak("Vire ï¿½ esquerda," + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Rode para a esquerda," + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=true;
 						front=false;
 						back=false;
 						right=false;
 					} else if((volta1(targetDegree) <= 130) && (volta1(targetDegree) >= 10) ) {
-						speak("Vire ï¿½ direita,"  + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros." );
+						speak("Rode para a direita,"  + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros." );
 						left=false;
 						front=false;
 						back=false;
 						right=true;
 					} else if(((volta1(targetDegree) >= -10) && (volta1(targetDegree) <= 10) && front==false) ) {
-						speak("Siga em frente," + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Siga em frente," + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=false;
 						front=true;
 						back=false;
 						right=false;
 					} else if ((volta1(targetDegree) < -130) || (volta1(targetDegree) > 130) ) {
-						speak("Volte para trï¿½s" + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Volte para trás" + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=false;
 						front=false;
 						back=false;
 						right=false;
 					} else {
-						speak("Continue por" + Double.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Continue por" + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 					}
 			}
 			gpsTargetGuideHandler.postDelayed(gpsTargetGuideRunnable, gpsTargetGuideDelta);
+		}
 		}
 	}
 	/*
