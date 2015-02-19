@@ -2348,8 +2348,7 @@ public class MainUI extends Activity implements SensorEventListener{
         	 statusWifi = 4;
          }
          
-         Toast.makeText(getApplicationContext(), "Signal strength = "
-            + String.valueOf(signalStrength_dBm), Toast.LENGTH_SHORT).show();
+         //Toast.makeText(getApplicationContext(), "Signal strength = " + String.valueOf(signalStrength_dBm), Toast.LENGTH_SHORT).show();
          
          //update indicator
          updateWifiStatus(statusWifi);

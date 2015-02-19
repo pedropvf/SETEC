@@ -380,7 +380,12 @@ public class BluetoothLeService extends Service {
 		{
 			Log.d("mess", "esforço maximo");
 			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT, heartRate);
+		}else if( heartRate < 50 ){
+			Log.d("mess", "Bombeiro Exausto");
+			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT, heartRate);
+			
 		}
+			
 		
 	}
 }

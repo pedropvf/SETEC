@@ -79,7 +79,7 @@ public class GPSTracker implements LocationListener {
 
 		} catch (Exception e) {
 			Log.e("posicao", e.toString());
-			showToast(e.toString());
+			//showToast(e.toString());
 		}
 
 	}
