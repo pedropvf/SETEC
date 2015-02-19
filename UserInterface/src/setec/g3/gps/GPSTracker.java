@@ -86,6 +86,8 @@ public class GPSTracker implements LocationListener {
 
 	//Location listener call-back function
 	public void onLocationChanged(Location location) {
+		parentClass.root.updateGpsIndicator(indicatorStates.FULL);
+		gpsLocation = location;
 		changed = true;
 		Log.d("posicao", "Location changed \nLat: " + location.getLatitude() + "\nLong: " + location.getLongitude());
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)location.getLatitude(),(float)location.getLongitude());
@@ -194,6 +196,7 @@ public class GPSTracker implements LocationListener {
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
+		Log.d("statusGPS", ""+status);
 		switch (status) {
 	    case LocationProvider.OUT_OF_SERVICE:
 	    	//showToast("GPS Status Changed: Out of Service");
