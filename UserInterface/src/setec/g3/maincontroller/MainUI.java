@@ -1003,6 +1003,8 @@ public class MainUI extends Activity implements SensorEventListener{
 				if(dist<=tolerancia){
 		
 					Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_REACH_DESTINATION);
+					speak("Cheguei ao destino!");
+					disableCompassTargetMode();
 					
 					//falta por aqui a fun��o para sair do modo guia
 				}
