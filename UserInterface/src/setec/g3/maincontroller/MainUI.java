@@ -1219,7 +1219,7 @@ public class MainUI extends Activity implements SensorEventListener{
 				    }
 				});
 			} else if (language==UILanguage.PT){
-				builder.setMessage("Quer entrar em Modo de Objetivo??");
+				builder.setMessage("Quer entrar em Modo de Objetivo?");
 				builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int which) {
 				    	toggleCompassTargetMode();
