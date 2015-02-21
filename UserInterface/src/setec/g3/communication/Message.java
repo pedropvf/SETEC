@@ -473,7 +473,7 @@ public class Message {
 		case 137:
 			//logout response
 			Log.d("MainUI", "Entrou no receber logout response");
-			userInterface.logout();
+			userInterface.exitOrLogout();
 			break;
 		default:
 			Log.e("ReadNet", "Wrong type of message.");

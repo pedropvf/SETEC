@@ -164,6 +164,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	
 	/* logout and exit */
 	private Button logoutBtn, exitBtn;
+	public boolean exitFlag = false;
 	
 	/* text to speech */
 	TextToSpeechHandler textToSpeechHandler;
@@ -1066,7 +1067,7 @@ public class MainUI extends Activity implements SensorEventListener{
 						back=false;
 						right=false;
 					} else if ((volta1(targetDegree) < -130) || (volta1(targetDegree) > 130) ) {
-						speak("Volte para trás" + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
+						speak("Volte para trï¿½s" + Integer.toString((int) coordDist(location.getLatitude(),location.getLongitude(),Olat,Olong)) + "metros.");
 						left=false;
 						front=false;
 						back=false;
@@ -1201,7 +1202,7 @@ public class MainUI extends Activity implements SensorEventListener{
 			} else if (language==UILanguage.PT){
 				builder.setTitle("Modo de Objetivo");
 			}
-			Log.d("logout", "Building Logout dialog");
+			Log.d("MainUI", "Building TargetMode dialog");
 			if(language==UILanguage.EN){
 				builder.setMessage("Do you want to go into Target Mode?");
 				builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
@@ -1330,6 +1331,17 @@ public class MainUI extends Activity implements SensorEventListener{
 		}
 	}
 	
+	public void exitOrLogout(){
+		if(exitFlag==true){
+			exitFlag = false;
+			exit();
+		}else{
+			exitFlag = false;
+			logout();
+		}
+		
+	}
+	
 	 /*For logging out. Returns to the log in window, but remains connected to the grid. (TODO verify if this works like this)
 	 */
 	public void logout(){
@@ -1356,6 +1368,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	 */
 	private void exit(){
 		//MainUI.this.finish();
+		Log.d("MainUI", "Entrou no Exit");
 		System.exit(0);
 	}
 	/*************************************************************************************************************************************
@@ -1480,11 +1493,16 @@ public class MainUI extends Activity implements SensorEventListener{
 		if(language==UILanguage.EN){
 			builder.setTitle("Exit");
 			builder.setMessage("Are you sure you want to quit?");
+			Log.d("MainUI", "Entrou no enviar Exit");
 
 			builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
 
 			    public void onClick(DialogInterface dialog, int which) {
-			        exit();
+			        //exit();
+			    	exitFlag = true;
+			    	Log.d("MainUI", "Entrou no enviar logout");
+			        root.toastMessage("Waiting for backend permission to logout...", Toast.LENGTH_SHORT, 0, 0);
+			        Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGOUT);
 			        dialog.dismiss();
 			    }
 
@@ -1504,7 +1522,11 @@ public class MainUI extends Activity implements SensorEventListener{
 			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
 
 			    public void onClick(DialogInterface dialog, int which) {
-			        exit();
+			    	//exit();
+			    	exitFlag = true;
+			    	Log.d("MainUI", "Entrou no enviar logout");
+			        root.toastMessage("Waiting for backend permission to logout...", Toast.LENGTH_SHORT, 0, 0);
+			        Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_LOGOUT);
 			        dialog.dismiss();
 			    }
 

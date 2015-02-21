@@ -1874,8 +1874,9 @@ public class FlyOutContainer extends RelativeLayout {
     	} else if (parentClass.language==UILanguage.PT){
     		sb = new StringBuilder("Última Mensagem\n").append((sentByMe==true)?("Utilizador: "):("Comando: ")).append(message);
     	}
-		lastMessage.add(message);
+
 		if(this.combatMode){
+			lastMessage.add(message);
 			parentClass.waiting_ok=true;
 		}
 		if(combatMode && sentByMe==false){
@@ -1898,10 +1899,10 @@ public class FlyOutContainer extends RelativeLayout {
 			}
 			
 			else if( lastMessage.size() == 1)
-				parentClass.speak("Repetição de mensagem: " + lastMessage.get(0));
+				parentClass.speak("Repetiçãoo de mensagem: " + lastMessage.get(0));
 			
 			else if( lastMessage.size() >=3)
-				parentClass.speak("Repetição de mensagem: " + lastMessage.get(lastMessage.size()-1) + "Repetição de mensagem: " + lastMessage.get(lastMessage.size()-2)+ "Repetição de mensagem: " + lastMessage.get(lastMessage.size()-3) );
+				parentClass.speak("Repetiçãoo de mensagem: " + lastMessage.get(lastMessage.size()-1) + "Repetição de mensagem: " + lastMessage.get(lastMessage.size()-2)+ "Repetição de mensagem: " + lastMessage.get(lastMessage.size()-3) );
 		}
 	}
 	/*
