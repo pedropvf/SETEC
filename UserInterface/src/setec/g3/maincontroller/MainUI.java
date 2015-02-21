@@ -1004,6 +1004,8 @@ public class MainUI extends Activity implements SensorEventListener{
 				if(dist<=tolerancia){
 		
 					Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_REACH_DESTINATION);
+					speak("Cheguei ao destino!");
+					disableCompassTargetMode();
 					
 					//falta por aqui a fun��o para sair do modo guia
 				}
@@ -1218,7 +1220,7 @@ public class MainUI extends Activity implements SensorEventListener{
 				    }
 				});
 			} else if (language==UILanguage.PT){
-				builder.setMessage("Quer entrar em Modo de Objetivo??");
+				builder.setMessage("Quer entrar em Modo de Objetivo?");
 				builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
 				    public void onClick(DialogInterface dialog, int which) {
 				    	toggleCompassTargetMode();
