@@ -96,7 +96,7 @@ public class FlyOutContainer extends RelativeLayout {
 	protected secondaryViewState combatModeCurrentState = secondaryViewState.CLOSED;
 	
 	/* movement handling */
-	private actioDialStateEnum actioDialCurrentState=actioDialStateEnum.RETURNING;
+	public actioDialStateEnum actioDialCurrentState=actioDialStateEnum.RETURNING;
 	private float actionDialBaseX,actionDialBaseY=0.0f;
 	private float x,y=0.0f;
 	protected Runnable dialAnimationRunnable = new DialAnimationRunnable();
@@ -207,8 +207,8 @@ public class FlyOutContainer extends RelativeLayout {
 	private float preDefMessagesIconBaseX, preDefMessagesIconBaseY;
 	
 	/* selection state */
-	private dialDisplayState dialState = dialDisplayState.OFF; 
-	private dialSelectionSate dialSelection = dialSelectionSate.UNSELECTED;
+	public dialDisplayState dialState = dialDisplayState.OFF; 
+	public dialSelectionSate dialSelection = dialSelectionSate.UNSELECTED;
 	
 	/* flow buttons */
 	private Button backToMainBtn, backToLineOfFireBtn, backToMessageBtn, backToSettingsBtn, backToPreDefinedMessageBtn;
@@ -1880,7 +1880,7 @@ public class FlyOutContainer extends RelativeLayout {
 			parentClass.waiting_ok=true;
 		}
 		if(combatMode && sentByMe==false){
-			parentClass.speak("Nova mensagem do comando..."+message);
+			parentClass.speak("Nova mensagem do comando "+message);
 		}
 		quickScreenMainText.setText(sb.toString());
 		//quickScreenMainText.
@@ -2703,7 +2703,7 @@ public class FlyOutContainer extends RelativeLayout {
 	/*
 	 * Saves animation starting conditions
 	 */
-	private void setAnimationStartConditions(){
+	public void setAnimationStartConditions(){
 		setAnimationactionDialStartTime();
 		setAnimationStartPositions();
 	}

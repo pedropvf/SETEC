@@ -83,6 +83,7 @@ public class ReadProtocol extends Thread {
 		while(goOn){
 	        try {
 	        	//receive request from protocol
+	        	Log.d("ReadProtocol","A ler...");
 				rqst request = (rqst)proIn.readObject();
 		        Log.d("ReadProtocol","Protocol requested id=" + request.id + " spec=" + request.spec);
 		        

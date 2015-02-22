@@ -353,6 +353,7 @@ public class Message {
 					userInterface.root.postMessage("Command",
 							"Por favor atualizar situação da linha de fogo.", PriorityLevel.CRITICAL, false);
 					userInterface.playBackendRequestReceived();
+					userInterface.lineOfFireUpdateRequest();
 				}
 
 			});

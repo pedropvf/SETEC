@@ -28,6 +28,9 @@ import setec.g3.userinterface.InterfaceStatusEnumerators;
 import setec.g3.userinterface.InterfaceStatusEnumerators.LineOfFireSituation;
 import setec.g3.userinterface.InterfaceStatusEnumerators.PriorityLevel;
 import setec.g3.userinterface.InterfaceStatusEnumerators.UILanguage;
+import setec.g3.userinterface.InterfaceStatusEnumerators.actioDialStateEnum;
+import setec.g3.userinterface.InterfaceStatusEnumerators.compassState;
+import setec.g3.userinterface.InterfaceStatusEnumerators.dialDisplayState;
 import setec.g3.userinterface.InterfaceStatusEnumerators.indicatorStates;
 import setec.g3.userinterface.InterfaceStatusEnumerators.userRanks;
 import setec.g3.userinterface.InterfaceStatusEnumerators.utilityStates;
@@ -1545,6 +1548,80 @@ public class MainUI extends Activity implements SensorEventListener{
 		
 		AlertDialog alert = builder.create();
 		alert.show();
+	}
+	
+	public void lineOfFireUpdateRequest(){
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		if(language==UILanguage.EN){
+			builder.setTitle("Line of Fire Update");
+			builder.setMessage("Command center is requesting a line of fire update. Confirm?");
+			Log.d("MainUI", "Entrou no enviar line of fire update request");
+
+			builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
+
+			    public void onClick(DialogInterface dialog, int which) {
+			        Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_ACCEPTS_REQUEST);
+			        root.actioDialCurrentState = actioDialStateEnum.RETURNING;
+					root.setAnimationStartConditions();
+					root.actionDialClean();
+					root.dialState=dialDisplayState.CLOSING;
+			        root.toggleLineOfFireView();
+			        root.setCompassMode(compassState.INVISIBLE);
+					root.actionDial.setVisibility(View.INVISIBLE);
+					root.dialSelection=root.dialSelection.LINE_OF_FIRE;
+			        root.updateSideButtonsPositionAndVisibility();
+			       
+			        dialog.dismiss();
+			    }
+
+			});
+
+			builder.setNegativeButton(" No ", new DialogInterface.OnClickListener() {
+
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			    	 Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_DENIES_REQUEST);
+			        dialog.dismiss();
+			    }
+			});
+		} else if (language==UILanguage.PT){
+			builder.setTitle("Actualização da linha de fogo");
+			builder.setMessage("O comando solicita o envio de uma nova linha de fogo. Confirma?");
+
+			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
+
+			    public void onClick(DialogInterface dialog, int which) {
+			        Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_ACCEPTS_REQUEST);
+			        root.actioDialCurrentState = actioDialStateEnum.RETURNING;
+					root.setAnimationStartConditions();
+					root.actionDialClean();
+					root.dialState=dialDisplayState.CLOSING;
+			        root.toggleLineOfFireView();
+			        root.setCompassMode(compassState.INVISIBLE);
+					root.actionDial.setVisibility(View.INVISIBLE);
+					root.dialSelection=root.dialSelection.LINE_OF_FIRE;
+			        root.updateSideButtonsPositionAndVisibility();
+			        
+			        dialog.dismiss();
+			    }
+
+			});
+
+			builder.setNegativeButton(" Não ", new DialogInterface.OnClickListener() {
+
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			    	Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_DENIES_REQUEST);
+			        dialog.dismiss();
+			    }
+			});
+		}
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+		
 	}
 	/*************************************************************************************************************************************
 	 ************************************************************************************************************************************/
