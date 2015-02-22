@@ -58,9 +58,14 @@ public class NetThread extends Thread{
 				
 			Log.d("NetThread", Arrays.toString(msgInt));
 			
-			output.writeObject(sendingPacket);
-			output.flush();
+			synchronized(output){
+			
+				output.writeObject(sendingPacket);
+				output.flush();
+			
+			}
 			Log.d("NetThread", "Enviou objecto");
+			
 		}catch (Exception e){
 			Log.e("NetThread",e.toString());
 		}
