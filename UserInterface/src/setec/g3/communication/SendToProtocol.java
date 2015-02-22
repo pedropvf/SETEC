@@ -34,13 +34,16 @@ public class SendToProtocol extends Thread{
             Log.d("SendToProtocol","App is requesting id=" + request.id + " spec=" + request.spec);
             
             //Send request to protocol
-            out.writeObject(request);
-            
-            Log.d("SendToProtocol","App sent object to protocol");
-            
-            //Protocol replies but never important
-            rspns response = (rspns)in.readObject();
-            Log.d("SendToProtocol","Protocol replied id=" + response.id);
+            synchronized(out){
+            	out.writeObject(request);
+            	
+            	Log.d("SendToProtocol","App sent object to protocol");
+                
+                //Protocol replies but never important
+                Object response = in.readObject();
+                //rspns response = (rspns)in.readObject();
+                //Log.d("SendToProtocol","Protocol replied id=" + response.id);
+            }           
 
 		} catch (IOException e) {
 			Log.e("ReadProtocol", e.toString());

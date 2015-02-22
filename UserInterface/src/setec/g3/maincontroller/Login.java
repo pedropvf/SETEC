@@ -163,7 +163,7 @@ public class Login extends Activity {
 			teamForm.setVisibility(View.VISIBLE);
 			connectForm.setVisibility(View.INVISIBLE);
 			rankRadioGrp.setVisibility(View.INVISIBLE);
-			toastMessage("Connected.", Toast.LENGTH_SHORT, 0, 0);
+			//toastMessage("Connected.", Toast.LENGTH_SHORT, 0, 0);
 			isConnected=true;
 			
 			//criar ReadProtocol object

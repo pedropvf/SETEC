@@ -56,8 +56,6 @@ public class TappDetector implements SensorEventListener{
 	private static final int SAMPLE_PERIOD_MILIS = 40;
 	private static final float DEAD_MAN_THRESHOLD = (float) 0.5;
 	boolean trackDeadMan;
-	boolean trackDeadMan2;
-	boolean trackDeadMan3;
 	int deadManPhase;
 	boolean entered_deadMan;
 	private long startDeadManTime = 0;
@@ -118,8 +116,6 @@ public class TappDetector implements SensorEventListener{
 	        senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_FASTEST); //mudei para normal
 	        	        
 	        trackDeadMan=false;
-	        trackDeadMan2=false;
-	        trackDeadMan3=false;
 	        deadManPhase = 0;
 	        entered_deadMan = false;
 	        
@@ -173,16 +169,16 @@ public class TappDetector implements SensorEventListener{
 	            if ((zg > 9.5) && (xg < 2 ) && (yg < 2)){
 	            	if(deadManPhase!=3){
 		           	    if(trackDeadMan==false){
+		           	    	Log.d("teste_dead" , "entrou no track dead man");
 		            		deadManPhase=1;
 			            	trackDeadMan=true;
 			            	startDeadManTime=System.currentTimeMillis();
 		            	} else {
 		            		currentDeadManTime=System.currentTimeMillis();
 		            		if((currentDeadManTime-startDeadManTime)>=deadManTimeMilis){
-		            			Log.d("teste_dead" , "entrou no dead man");
-		            			if( (deadManPhase==1) && (trackDeadMan2==false) ){
-		            				trackDeadMan2=true;
-		    		            	startDeadManTime=System.currentTimeMillis();
+		            			Log.d("teste_dead" , "entrou no dead man (30 seg depois)");
+		            			if( (deadManPhase==1) ){
+		            		       	startDeadManTime=System.currentTimeMillis();
 		    		            	deadManPhase=2;
 		    		            	entered_deadMan=false;
 		    		            	Log.d("teste_dead" , "dead man fase 2");
@@ -197,8 +193,8 @@ public class TappDetector implements SensorEventListener{
 		            	}
 	            	}
 	            } else {
+	            	//Log.d("teste_dead" , "saiu do dead man");
 	            	trackDeadMan=false;
-	            	trackDeadMan2=false;
 	            	deadManPhase=0;
 	            	entered_deadMan = false;
 	            }

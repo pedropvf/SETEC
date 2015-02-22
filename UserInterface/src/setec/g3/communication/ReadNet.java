@@ -88,6 +88,16 @@ public class ReadNet extends Thread{
 					false, null);
 			s.start();
 		}
+		
+		//toast message informing internet connection
+		main.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Toast.makeText(main.getApplicationContext(), "Internet successfully connected", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
 		while (true) {
 
 			try {
@@ -213,26 +223,35 @@ public class ReadNet extends Thread{
     	int flag = 0;
 		while (isNetworkConnected() == false) {
 			
-			if(flag==0 && isProtocolCreated==true){
+			/*if(flag==0 && isProtocolCreated==true){
 				//send message to protocol saying that GSM connection was lost or is not connected
 				SendToProtocol s = new SendToProtocol((byte) 0x33, (byte) 0x11, false, null);
 				s.start();
-			}
-			if (isGSMAvailable() == true && flag<1) {
-				Log.d("ReadNet", "GSM is available but not connected");
+				flag++;
+			}*/
+			if (flag==0 && isGSMAvailable() == true) {
+				Log.d("ReadNet", "A network is available but not connected");
 				flag++;
 				//send to UI (a dialog opening the connectivity)
 				main.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						Toast.makeText(main.getApplicationContext(), "Couldn't connect to the internet, check that you have an internet connection", Toast.LENGTH_LONG).show();
+						Toast.makeText(main.getApplicationContext(), "Couldn't connect to the Internet, please turn on the network on the setting menu.", Toast.LENGTH_LONG).show();
 					}
 				});
 				
-			} else {
+			} else if (flag == 0 && isGSMAvailable() == false) {
 				// SEM REDE
-				Log.d("ReadNet", "não há rede ou o utilizador cancelou ou não ligou à net");
+				Log.d("ReadNet", "A network is not available.");
+				flag++;
+				main.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						Toast.makeText(main.getApplicationContext(), "Couldn't connect to the Internet, check that you have an internet connection.", Toast.LENGTH_LONG).show();
+					}
+				});
 			}
 
 			try {
