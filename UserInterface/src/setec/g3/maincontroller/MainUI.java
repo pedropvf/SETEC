@@ -1587,7 +1587,7 @@ public class MainUI extends Activity implements SensorEventListener{
 			    }
 			});
 		} else if (language==UILanguage.PT){
-			builder.setTitle("Actualização da linha de fogo");
+			builder.setTitle("ActualizaÔøΩÔøΩo da linha de fogo");
 			builder.setMessage("O comando solicita o envio de uma nova linha de fogo. Confirma?");
 
 			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
@@ -1609,7 +1609,7 @@ public class MainUI extends Activity implements SensorEventListener{
 
 			});
 
-			builder.setNegativeButton(" Não ", new DialogInterface.OnClickListener() {
+			builder.setNegativeButton(" NÔøΩo ", new DialogInterface.OnClickListener() {
 
 			    @Override
 			    public void onClick(DialogInterface dialog, int which) {
@@ -2461,4 +2461,19 @@ public class MainUI extends Activity implements SensorEventListener{
 
     };/*end of signal class*/
     
+    /*************************************************************************************************************************************
+ 	 *************************************************************************************************************************************
+ 	 * 
+ 	 * COMBAT MODE STUFF
+ 	 *
+ 	 *************************************************************************************************************************************
+ 	 *************************************************************************************************************************************/
+    public void notifyOutOfAlert(){
+    	Message.send((byte)23);
+    	if(language==UILanguage.EN){
+	    	toastMessage("Out of Alarm notification Sent",Toast.LENGTH_SHORT, 0, 0);
+    	} else if (language==UILanguage.PT){
+	    	toastMessage("Notifica√ß√£o de sa√≠da de alarme enviada",Toast.LENGTH_SHORT, 0, 0);
+    	}
+    }
 }

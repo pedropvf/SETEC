@@ -10,7 +10,10 @@ import setec.g3.communication.ReadProtocol;
 import setec.g3.communication.CommEnumerators.Protocol;
 import setec.g3.heart.DeviceControlActivity;
 import setec.g3.ui.R;
+import setec.g3.userinterface.InterfaceStatusEnumerators.UILanguage;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +33,7 @@ public class Login extends Activity {
 
     /* The form Components */
 	private Button loginBtn;
+	private Button exitBtn;
 	private RadioGroup rankRadioGrp;
 	private static EditText userText;
 	private static EditText passText;
@@ -98,6 +102,7 @@ public class Login extends Activity {
 		connectForm = (LinearLayout) findViewById(R.id.login_port_ip_form_layout);
 		loginForm = (LinearLayout) findViewById(R.id.login_form_layout);
 		teamForm = (LinearLayout) findViewById(R.id.login_team);
+		exitBtn = (Button) findViewById(R.id.exit_from_login_btn);
 	}
 	
 	/*
@@ -142,6 +147,12 @@ public class Login extends Activity {
 		    	}
 		    }
 		});
+		exitBtn.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	buildExitAlert();
+		    }
+		});
 	/*	userText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -150,6 +161,41 @@ public class Login extends Activity {
 				}
 			}
 		});*/
+	}
+	
+	void buildExitAlert(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getApplicationContext());
+	
+		builder.setTitle("Exit");
+		Log.d("exit", "Building exit dialog");
+		
+			builder.setMessage("Tem a certeza que quer sair?");
+			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
+	
+			    public void onClick(DialogInterface dialog, int which) {
+			    	if(readNet!=null){
+			        	readNet.kill_thread();
+			        }
+			        if(readProtocol!=null){
+			        	readProtocol.kill_thread();
+			        }
+			    	System.exit(0);
+			    }
+	
+			});
+			builder.setNegativeButton(" Não ", new DialogInterface.OnClickListener() {
+	
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			        dialog.dismiss();
+			    }
+			});
+		
+	
+		
+	
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 	
 	/*

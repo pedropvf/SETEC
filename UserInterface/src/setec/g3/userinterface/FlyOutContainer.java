@@ -2904,6 +2904,7 @@ public class FlyOutContainer extends RelativeLayout {
 					combatMode=false;
 					parentClass.setTapDetectorOperation(combatMode);
 					toggleCombatModeView();
+					parentClass.notifyOutOfAlert(); // to send out of alert
 				} else {
 					combatModeCircleOut.setVisibility(View.VISIBLE);
 					combatModeCircleOut.setScaleX(0.0f);
