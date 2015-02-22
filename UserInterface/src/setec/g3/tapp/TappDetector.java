@@ -166,7 +166,7 @@ public class TappDetector implements SensorEventListener{
 	            float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
 
 	            
-	            if ((zg > 9.5) && (xg < 2 ) && (yg < 2)){
+	            if (( (zg < -8) ||(zg > 8)) && (xg < 2 ) && (yg < 3.5)){
 	            	if(deadManPhase!=3){
 		           	    if(trackDeadMan==false){
 		           	    	Log.d("teste_dead" , "entrou no track dead man");
