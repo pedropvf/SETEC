@@ -2139,20 +2139,26 @@ public class FlyOutContainer extends RelativeLayout {
 		    send.setOnClickListener(new OnClickListener() {
 	            @Override
 	            public void onClick(View arg0) {
-	            	String prefix=new String("PDM ");
-	            	String toast=new String("Predefined Message sent.");
-	            	if(parentClass.language==UILanguage.EN){
-	            		prefix=new String("[PDM ");
-	            		toast=new String("Predefined Message sent.");
-			    	} else if (parentClass.language==UILanguage.PT){
-			    		prefix=new String("[MPD ");
-			    		toast=new String("Mensagem predefinida enviada.");
-			    	}
-	            	postMessage("You", new StringBuilder(prefix).append(pdmCode).append("][ ").append(group.string).append(" ]").toString(), PriorityLevel.CRITICAL, true);
-	            	vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
-	            	toastMessage("Predefined Message sent.",Toast.LENGTH_SHORT, 0, 0);
-	            	Message.send(CommEnumerators.FIREFIGHTER_TO_COMMAND_PREDEFINED_MESSAGE, pdmCode);
-	            	parentClass.parseOutgoingPredefinedMessage(pdmCode);
+	            	if(pdmCode==20){ // desligar backend
+	            		
+	            	} else if(pdmCode==21){ // ligar backend
+		    	
+	            	} else {
+		            	String prefix=new String("PDM ");
+		            	String toast=new String("Predefined Message sent.");
+		            	if(parentClass.language==UILanguage.EN){
+		            		prefix=new String("[PDM ");
+		            		toast=new String("Predefined Message sent.");
+				    	} else if (parentClass.language==UILanguage.PT){
+				    		prefix=new String("[MPD ");
+				    		toast=new String("Mensagem predefinida enviada.");
+				    	}
+		            	postMessage("You", new StringBuilder(prefix).append(pdmCode).append("][ ").append(group.string).append(" ]").toString(), PriorityLevel.CRITICAL, true);
+		            	vibrate(InterfaceStatusEnumerators.buttonTapVibrationDuration);
+		            	toastMessage("Predefined Message sent.",Toast.LENGTH_SHORT, 0, 0);
+		            	Message.send(CommEnumerators.FIREFIGHTER_TO_COMMAND_PREDEFINED_MESSAGE, pdmCode);
+		            	parentClass.parseOutgoingPredefinedMessage(pdmCode);
+	            	}
 	            }
 		    });
 		    return convertView;
@@ -2211,6 +2217,8 @@ public class FlyOutContainer extends RelativeLayout {
 		addPredefinedSystemDesignMessage("Carro em Perigo.", "Notificar Backend.", 17);
 		addPredefinedSystemDesignMessage("Descanse.", "Notificar Backend.", 18);
 		addPredefinedSystemDesignMessage("Fogo a Alastrar.", "Notificar Backend.", 19);
+		addPredefinedSystemDesignMessage("[DEBUG] Socket Backend OFF.", "Desligar Socket Backend.", 20);
+		addPredefinedSystemDesignMessage("[DEBUG] Socket Backend ON.", "Ligar Socket Backend.", 21);
 		
 	}
 	/************************************************************************************************************************************
