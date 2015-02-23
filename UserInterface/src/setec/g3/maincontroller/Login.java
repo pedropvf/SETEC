@@ -164,15 +164,8 @@ public class Login extends Activity {
 	}
 	
 	void buildExitAlert(){
-		AlertDialog.Builder builder = new AlertDialog.Builder(this.getApplicationContext());
-	
-		builder.setTitle("Exit");
 		Log.d("exit", "Building exit dialog");
-		
-			builder.setMessage("Tem a certeza que quer sair?");
-			builder.setPositiveButton(" Sim ", new DialogInterface.OnClickListener() {
 	
-			    public void onClick(DialogInterface dialog, int which) {
 			    	if(readNet!=null){
 			        	readNet.kill_thread();
 			        }
@@ -180,22 +173,7 @@ public class Login extends Activity {
 			        	readProtocol.kill_thread();
 			        }
 			    	System.exit(0);
-			    }
-	
-			});
-			builder.setNegativeButton(" Não ", new DialogInterface.OnClickListener() {
-	
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
-			        dialog.dismiss();
-			    }
-			});
-		
-	
-		
-	
-		AlertDialog alert = builder.create();
-		alert.show();
+			
 	}
 	
 	/*

@@ -366,6 +366,7 @@ public class BluetoothLeService extends Service {
 		return mBluetoothGatt.getServices();
 	}
 	
+	public boolean heartAlertSent=false;
 	private void CheckFatigue(int heartRate) {
 		
 		//a freq cardiaca maxima nos homens e dada por: 220 - idade e nas mulheres: 226-idade
@@ -375,14 +376,21 @@ public class BluetoothLeService extends Service {
 		if( ( heartRate > (0.5*freqMax) ) && ( heartRate < (0.6*freqMax)) )
 		{
 			Log.d("mess", "actividade moderada");
+			heartAlertSent=false;
 		}
 		else if( ( heartRate > (0.9*freqMax) ) && ( heartRate < freqMax) )
 		{
 			Log.d("mess", "esforço maximo");
-			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT, heartRate);
-		}else if( heartRate < 50 ){
+			if(heartAlertSent==false){
+				Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT, heartRate);
+				heartAlertSent=true;
+			}
+		}else if( heartRate < 60){
 			Log.d("mess", "Bombeiro Exausto");
-			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT, heartRate);
+			if(heartAlertSent==false){
+				Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_HEART_RATE_ALERT, heartRate);
+				heartAlertSent=true;
+			}
 			
 		}
 			
