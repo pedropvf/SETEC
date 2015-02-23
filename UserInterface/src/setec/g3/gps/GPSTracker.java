@@ -38,13 +38,13 @@ public class GPSTracker implements LocationListener {
 	static Location gpsLocation; // location
 	double latitude; // latitude
 	double longitude; // longitude
-	static double previous_latitude;
-	static double previous_longitude;
 	
 	//timer
 	Timer timer;
 	TimerTask timerTask;
 	boolean changed = false;
+	
+	
 
 	// The minimum distance to change Updates in meters
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 50; // 50 meters
@@ -90,11 +90,10 @@ public class GPSTracker implements LocationListener {
 		gpsLocation = location;
 		changed = true;
 		Log.d("posicao", "Location changed \nLat: " + location.getLatitude() + "\nLong: " + location.getLongitude());
+		if(this.canGetLocation())
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)location.getLatitude(),(float)location.getLongitude());
 	 	//showToast("Location changed \nLat: " + location.getLatitude() + "\nLong: " + location.getLongitude());
 		
-		previous_latitude= location.getLatitude();
-		previous_longitude= location.getLongitude();
 	}
 	
 	public void sendLastLocation(){
@@ -103,12 +102,10 @@ public class GPSTracker implements LocationListener {
 		Log.d("Posicao", "Location is the same \nLat: " + gpsLocation.getLatitude() + "\nLong: " + gpsLocation.getLongitude());
 		//showToast("Location is the same \nLat: " + gpsLocation.getLatitude() + "\nLong: " + gpsLocation.getLongitude());
 		
-		if((previous_latitude != gpsLocation.getLatitude()) ||(previous_longitude!= gpsLocation.getLongitude()))
+		if(this.canGetLocation())
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)gpsLocation.getLatitude(),(float)gpsLocation.getLongitude());
 		
-		previous_latitude= gpsLocation.getLatitude();
-		previous_longitude= gpsLocation.getLongitude();
-		
+			
 		}catch (Exception e){
 			Log.e("posicao", e.toString());
 			//showToast(e.toString());
