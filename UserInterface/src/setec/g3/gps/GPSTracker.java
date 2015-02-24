@@ -14,6 +14,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -208,6 +209,27 @@ public class GPSTracker implements LocationListener {
 	    	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
 	        break;
 		}
+	}
+	
+	public void onGpsStatusChanged(int event){
+		Log.d("statusGPS2", "" + event);
+
+	   
+		/*switch (event) {
+	    case GpsStatus.GPS_EVENT_STOPPED:
+	    	//showToast("GPS Status Changed: Out of Service");
+	    	parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
+	        break;
+	    case LocationProvider.TEMPORARILY_UNAVAILABLE:
+	    	//showToast("GPS Status Changed: Temporarily Unavailable");
+	    	parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
+	        break;
+	    case LocationProvider.AVAILABLE:
+	    	//showToast("GPS Status Changed: Available");
+	    	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
+	        break;
+		}*/
+	    
 	}
 	
 	 public void startTimer() {
