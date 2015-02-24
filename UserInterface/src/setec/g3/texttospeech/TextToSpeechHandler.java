@@ -58,13 +58,13 @@ public class TextToSpeechHandler {
             audioManager.setBluetoothScoOn(true);
 			Log.d("TTS", text);
 			
-			MediaPlayer mediaPlayer = MediaPlayer.create(act.getApplicationContext(), R.raw.alarm);
+			/*MediaPlayer mediaPlayer = MediaPlayer.create(act.getApplicationContext(), R.raw.alarm);
     		mediaPlayer.start();
     		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
     	         public void onCompletion(MediaPlayer mp) {
     	             mp.release();
     	         }
-    	     });
+    	     });*/
 			
     		tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
             
