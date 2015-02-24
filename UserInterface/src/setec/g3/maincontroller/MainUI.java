@@ -160,7 +160,7 @@ public class MainUI extends Activity implements SensorEventListener{
 	private long gpsCompassAngleDelta=50;
 	protected Handler gpsTargetGuideHandler = new Handler();
 	protected Runnable gpsTargetGuideRunnable;
-	private long gpsTargetGuideDelta = 3000;
+	private long gpsTargetGuideDelta = 7000;
 	double northDegree;
 	double targetDegree;
 	Location location;
