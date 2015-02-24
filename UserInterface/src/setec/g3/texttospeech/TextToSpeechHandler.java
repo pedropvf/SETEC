@@ -56,7 +56,7 @@ public class TextToSpeechHandler {
             audioManager.setMode(AudioManager.MODE_IN_CALL);
             audioManager.startBluetoothSco();
             audioManager.setBluetoothScoOn(true);
-			Log.d("TTS", text);
+			Log.d("TTS", text + " \n ceninhas" + audioManager.toString());
 			
 			/*MediaPlayer mediaPlayer = MediaPlayer.create(act.getApplicationContext(), R.raw.alarm);
     		mediaPlayer.start();
