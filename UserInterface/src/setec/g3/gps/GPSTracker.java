@@ -26,7 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class GPSTracker implements LocationListener {
+public class GPSTracker implements LocationListener, GpsStatus.Listener {
 
 	public Context mContext;
 	public Activity act;
@@ -69,6 +69,8 @@ public class GPSTracker implements LocationListener {
 			
 			// getting GPS status
 			isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			
+			locationManager.addGpsStatusListener(this);
 
 			if (isGPSEnabled) {
 				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,MIN_TIME_BW_UPDATES,MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
@@ -211,26 +213,29 @@ public class GPSTracker implements LocationListener {
 		}
 	}
 	
-	public void onGpsStatusChanged(int event){
+	public void onGpsStatusChanged(int event) {
 		Log.d("statusGPS2", "" + event);
+	    switch (event) {
+	        case GpsStatus.GPS_EVENT_STARTED:
+	            // Do Something with mStatus info
+	            break;
 
-	   
-		/*switch (event) {
-	    case GpsStatus.GPS_EVENT_STOPPED:
-	    	//showToast("GPS Status Changed: Out of Service");
-	    	parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
-	        break;
-	    case LocationProvider.TEMPORARILY_UNAVAILABLE:
-	    	//showToast("GPS Status Changed: Temporarily Unavailable");
-	    	parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
-	        break;
-	    case LocationProvider.AVAILABLE:
-	    	//showToast("GPS Status Changed: Available");
-	    	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
-	        break;
-		}*/
-	    
+	        case GpsStatus.GPS_EVENT_STOPPED:
+	            // Do Something with mStatus info
+	            break;
+
+	        case GpsStatus.GPS_EVENT_FIRST_FIX:
+	            // Do Something with mStatus info
+	            break;
+
+	        case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+	            // Do Something with mStatus info
+	            break;
+	    }
+
 	}
+	
+	
 	
 	 public void startTimer() {
 	    	
