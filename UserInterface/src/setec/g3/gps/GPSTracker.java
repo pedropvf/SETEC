@@ -1,5 +1,6 @@
 package setec.g3.gps;
 
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,6 +15,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -34,7 +36,6 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 
 	// flag for GPS status
 	boolean isGPSEnabled = false;
-	//boolean sendaux=true;
 
 	static Location gpsLocation; // location
 	double latitude; // latitude
@@ -44,6 +45,7 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 	Timer timer;
 	TimerTask timerTask;
 	boolean changed = false;
+	boolean gpsFixed = false;
 	
 	
 
@@ -92,8 +94,8 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 		parentClass.root.updateGpsIndicator(indicatorStates.FULL);
 		gpsLocation = location;
 		changed = true;
+		gpsFixed = true;
 		Log.d("posicao", "Location changed \nLat: " + location.getLatitude() + "\nLong: " + location.getLongitude());
-		if(this.canGetLocation())
 		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)location.getLatitude(),(float)location.getLongitude());
 	 	//showToast("Location changed \nLat: " + location.getLatitude() + "\nLong: " + location.getLongitude());
 		
@@ -105,8 +107,10 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 		Log.d("Posicao", "Location is the same \nLat: " + gpsLocation.getLatitude() + "\nLong: " + gpsLocation.getLongitude());
 		//showToast("Location is the same \nLat: " + gpsLocation.getLatitude() + "\nLong: " + gpsLocation.getLongitude());
 		
-		if(this.canGetLocation())
-		Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)gpsLocation.getLatitude(),(float)gpsLocation.getLongitude());
+		if(gpsFixed){
+			Message.send((byte)CommEnumerators.FIREFIGHTER_TO_COMMAND_GPS, (float)gpsLocation.getLatitude(),(float)gpsLocation.getLongitude());
+		}
+		
 		
 			
 		}catch (Exception e){
@@ -117,10 +121,10 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 	
 	public Location getLocation(){
 		if(gpsLocation!=null){
-			parentClass.root.updateGpsIndicator(indicatorStates.FULL);
+		//	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
 			return gpsLocation;
 		} else {
-			parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
+		//	parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
 			return null;
 		}
 	}
@@ -194,7 +198,7 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 	public void onProviderEnabled(String provider) {
 	}
 
-	@Override
+	/*@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		Log.d("statusGPS", ""+status);
 		switch (status) {
@@ -211,25 +215,56 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 	    	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
 	        break;
 		}
-	}
+	}*/
 	
 	public void onGpsStatusChanged(int event) {
-		Log.d("statusGPS2", "" + event);
+	
+		GpsStatus mStatus = null; 
+		mStatus = locationManager.getGpsStatus(mStatus);
 	    switch (event) {
 	        case GpsStatus.GPS_EVENT_STARTED:
-	            // Do Something with mStatus info
+	        	Log.d("statusGPS2", "" + event);
 	            break;
 
 	        case GpsStatus.GPS_EVENT_STOPPED:
-	            // Do Something with mStatus info
+	        	Log.e("statusGPS2", "" + event);
 	            break;
 
 	        case GpsStatus.GPS_EVENT_FIRST_FIX:
-	            // Do Something with mStatus info
+	        	Log.e("statusGPS2", "" + event);
+	        	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
+	    		gpsFixed = true;
 	            break;
 
 	        case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-	            // Do Something with mStatus info
+	        	
+	        	final GpsStatus gs = locationManager.getGpsStatus(null);
+	            int i = 0;
+	            final Iterator<GpsSatellite> it = gs.getSatellites().iterator();
+	            while( it.hasNext() ) {
+	                if(it.next().usedInFix()){
+	                	i += 1;
+	                }
+	            }
+	            Log.d("statusGPS2", "satelites = " + i);
+	            if(i<4){
+	            	parentClass.root.updateGpsIndicator(indicatorStates.EMPTY);
+	            	gpsFixed = false;
+	            }
+	            if(i>=4){
+	            	parentClass.root.updateGpsIndicator(indicatorStates.FULL);
+	            	gpsFixed = true;
+	            }
+	            
+	        	/*Log.d("statusGPS2", "" + event);
+	        	if(mStatus!=null){
+	        		//Iterable<GpsSatellite> coisa = mStatus.getSatellites();
+	        		int num = mStatus.getMaxSatellites();
+	        		if(num<3){
+	        			Log.e("statusGPS2", "Nao ha GPS");
+	        		}
+	        	}
+	        	*/
 	            break;
 	    }
 
@@ -324,5 +359,11 @@ public class GPSTracker implements LocationListener, GpsStatus.Listener {
 	    	return coord;
 	   	}
     }
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
